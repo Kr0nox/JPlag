@@ -33,10 +33,15 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install and Test 🧪
-        working-directory: report-viewer
+      - name: Install and Build 🔧
         run: |
           npm install
-          npx playwright install --with-deps
           npm run build
+        
+      - name: Install playwright 🔧
+        run: npx playwright install --with-deps
+
+      - name: Run tests 🧪
+        working-directory: report-viewer
+        run: |
           npm run test:e2e
