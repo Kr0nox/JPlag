@@ -7,7 +7,6 @@ on:
     paths:
       - ".github/workflows/report-viewer-e2e.yml"
       - "report-viewer/**"
-  push:
 
 jobs:
   pre_job:
@@ -47,3 +46,11 @@ jobs:
         working-directory: report-viewer
         run: |
           npm run test:e2e
+
+      - name: Upload test results 📤
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            report-viewer/test-results
+            report-viewer/playwright-report
