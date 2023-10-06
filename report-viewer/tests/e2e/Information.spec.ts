@@ -1,4 +1,5 @@
-import { expect, test, Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
+import { uploadFile } from './TestUtils'
 
 test('Test information page', async ({ page }) => {
   await page.goto('/')
@@ -30,18 +31,4 @@ test('Test information page', async ({ page }) => {
   expect(runData).toContain('Total Comparisons: 6')
   expect(runData).toContain('Shown Comparisons: 6')
   expect(runData).toContain('Missing Comparisons: 0')
-
-  expect(await page.screenshot()).toMatchSnapshot('test.png')
 })
-
-export async function uploadFile(fileName: string, page: Page) {
-  expect(page).toHaveURL('/')
-
-  // upload file through file chooser
-  const fileChooserPromise = page.waitForEvent('filechooser')
-  await page.getByText('Drag and Drop zip/Json file on this page').click()
-  const fileChooser = await fileChooserPromise
-  await fileChooser.setFiles(`tests/e2e/assets/${fileName}`)
-
-  await page.waitForURL('/overview')
-}
