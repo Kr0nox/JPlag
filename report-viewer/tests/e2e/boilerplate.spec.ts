@@ -12,7 +12,7 @@ test('Test information page', async ({ page }) => {
   expect(bodyOverview).toContain('Min Match Length: 9')
 
   // go to information page
-  await page.getByText('More').click()
+  await page.getByText('More', { exact: true }).click()
   await page.waitForURL('/info')
 
   // check displayed run options on information page
@@ -30,6 +30,8 @@ test('Test information page', async ({ page }) => {
   expect(runData).toContain('Total Comparisons: 6')
   expect(runData).toContain('Shown Comparisons: 6')
   expect(runData).toContain('Missing Comparisons: 0')
+
+  expect(await page.screenshot()).toMatchSnapshot('test.png')
 })
 
 export async function uploadFile(fileName: string, page: Page) {
