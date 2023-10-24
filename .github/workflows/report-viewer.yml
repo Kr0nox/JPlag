@@ -26,7 +26,7 @@ jobs:
           PATCH=$(echo $VERSION | cut -d '.' -f 3)
           sed -i "1,/major/s/.*/    \"major\": $MAJOR,/" report-viewer/src/version.json
           sed -i "2,/minor/s/.*/    \"minor\": $MINOR,/" report-viewer/src/version.json
-          sed -i "3,/patch/s/.*/    \"patch\": $PATCH,/" report-viewer/src/version.json
+          sed -i "3,/patch/s/.*/    \"patch\": $PATCH/" report-viewer/src/version.json
           echo "Version of Report Viewer:"
           cat report-viewer/src/version.json
 
