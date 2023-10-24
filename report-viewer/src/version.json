@@ -3,5 +3,10 @@
     "major": 0,
     "minor": 0,
     "patch": 0
+  },
+  "min_report_version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 0
   }
 }
