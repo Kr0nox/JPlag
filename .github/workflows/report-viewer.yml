@@ -24,9 +24,9 @@ jobs:
           MAJOR=$(echo $VERSION | cut -d '.' -f 1)
           MINOR=$(echo $VERSION | cut -d '.' -f 2)
           PATCH=$(echo $VERSION | cut -d '.' -f 3)
-          sed -i "0,/major/{s/.*/    \"major\": $MAJOR,}" report-viewer/src/version.json
-          sed -i "/minor/s/.*/    \"minor\": $MINOR,/1g" report-viewer/src/version.json
-          sed -i "0,/patch/{s/.*/    \"patch\": $PATCH,}" report-viewer/src/version.json
+          sed -i "/major/s/.*/    \"major\": $MAJOR," report-viewer/src/version.json
+          sed -i "0,/minor/s/.*/    \"minor\": $MINOR," report-viewer/src/version.json
+          sed -i "/patch/s/.*/    \"patch\": $PATCH," report-viewer/src/version.json
           echo "Version of Report Viewer:"
           cat report-viewer/src/version.json
 
