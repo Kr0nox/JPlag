@@ -48,7 +48,7 @@ jobs:
           name: JPlag
       
       - name: Copy and unzip submissions#
-        run: unzip /.github/files/demoSubmissions.zip -d /
+        run: unzip /.github/workflows/files/demoSubmissions.zip -d /
       
       - name: Rename jar
         run: mv *.jar ./jplag.jar
