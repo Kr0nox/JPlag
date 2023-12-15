@@ -5,31 +5,9 @@ on:
  push:
       
 jobs:
-  build-jar:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: 'temurin'
-        
-      - name: Build Assembly
-        run: mvn clean package assembly:single
-        
-      - name: Upload Assembly
-        uses: actions/upload-artifact@v3
-        with:
-          name: "JPlag"
-          path: "cli/target/jplag-*-jar-with-dependencies.jar"
-
 
   run-example:
-    needs: build-jar
+   # needs: build-jar
     runs-on: ubuntu-latest
 
     steps:
@@ -47,8 +25,8 @@ jobs:
         with:
           name: JPlag
       
-      - name: Copy and unzip submissions#
-        run: unzip /.github/workflows/files/demoSubmissions.zip -d /
+      - name: Copy and unzip submissions
+        run: unzip ./.github/workflows/files/demoSubmissions.zip -d /
       
       - name: Rename jar
         run: mv *.jar ./jplag.jar
