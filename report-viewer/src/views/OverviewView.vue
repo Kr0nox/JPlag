@@ -7,16 +7,50 @@
       <Container class="flex-grow">
         <h2>JPlag Report</h2>
         <div class="flex flex-row items-center space-x-5">
-          <TextInformation label="Directory">{{ submissionPathValue }}</TextInformation>
+          <TextInformation label="Submission Directory">{{ submissionPathValue }}</TextInformation>
           <TextInformation label="Total Submissions">{{
             store().getSubmissionIds.length
           }}</TextInformation>
-          <TextInformation label="Total Comparisons">{{
-            overview.totalComparisons
-          }}</TextInformation>
-          <TextInformation label="Min Match Length">{{
-            overview.matchSensitivity
-          }}</TextInformation>
+
+          <TextInformation label="Shown/Total Comparisons">
+            <template #default
+              >{{ overview.shownComparisons }} / {{ overview.totalComparisons }}</template
+            >
+            <template #tooltip>
+              <div class="whitespace-pre text-sm">
+                <TextInformation label="Shown Comparisons">{{
+                  overview.shownComparisons
+                }}</TextInformation>
+                <TextInformation label="Total Comparisons">{{
+                  overview.totalComparisons
+                }}</TextInformation>
+                <div v-if="overview.missingComparisons > 0">
+                  <TextInformation label="Missing Comparisons">{{
+                    overview.missingComparisons
+                  }}</TextInformation>
+                  <p>
+                    To include more comparisons in the report modify the number of shown comparisons
+                    in the CLI.
+                  </p>
+                </div>
+              </div>
+            </template>
+          </TextInformation>
+
+          <TextInformation label="Min Token Match">
+            <template #default>
+              {{ overview.matchSensitivity }}
+            </template>
+            <template #tooltip>
+              <div class="whitespace-pre text-sm">
+                <p>
+                  Tunes the comparison sensitivity by adjusting the minimum token required to be
+                  counted as a matching section.
+                </p>
+                <p>It can be adjusted in the CLI.</p>
+              </div>
+            </template>
+          </TextInformation>
 
           <ToolTipComponent direction="left">
             <template #default>
@@ -64,53 +98,27 @@
         </div>
       </Container>
 
-      <Container class="flex max-h-0 min-h-full flex-1 flex-col space-y-2">
-        <div class="flex flex-row items-center space-x-8">
-          <h2>Top Comparisons:</h2>
-          <ToolTipComponent direction="bottom" class="flex-grow">
-            <template #default>
-              <SearchBarComponent
-                placeholder="Filter/Unhide Comparisons"
-                @input-changed="(value) => (searchString = value)"
-              />
-            </template>
-            <template #tooltip>
-              <p class="whitespace-pre text-sm">
-                Type in the name of a submission to only show comparisons that contain this
-                submission.
-              </p>
-              <p class="whitespace-pre text-sm">Fully written out names get unhidden.</p>
-            </template>
-          </ToolTipComponent>
-
-          <Button class="w-24" @click="changeAnnoymousForAll()">
-            {{
-              store().state.anonymous.size == store().getSubmissionIds.length
-                ? 'Show All'
-                : 'Hide All'
-            }}
-          </Button>
-        </div>
-        <MetricSelector
-          title="Sort By:"
-          :defaultSelected="store().uiState.comparisonTableSortingMetric"
-          @selection-changed="
-            (metric: MetricType) => (store().uiState.comparisonTableSortingMetric = metric)
-          "
-        />
+      <Container class="flex max-h-0 min-h-full flex-1 flex-col">
         <ComparisonsTable
           :clusters="overview.clusters"
-          :top-comparisons="displayedComparisons"
+          :top-comparisons="overview.topComparisons"
           class="min-h-0 flex-1"
-        />
+        >
+          <template #footer v-if="overview.topComparisons.length < overview.totalComparisons">
+            <p class="w-full pt-1 text-center font-bold">
+              Not all comparisons are shown. To see more, re-run JPlag with a higher maximum number
+              argument.
+            </p>
+          </template>
+        </ComparisonsTable>
       </Container>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onErrorCaptured, ref, watch, type PropType } from 'vue'
-import { router } from '@/router'
+import { computed, type PropType, onErrorCaptured } from 'vue'
+import { redirectOnError, router } from '@/router'
 import DistributionDiagram from '@/components/DistributionDiagram.vue'
 import ComparisonsTable from '@/components/ComparisonsTable.vue'
 import { store } from '@/stores/store'
@@ -118,13 +126,11 @@ import Container from '@/components/ContainerComponent.vue'
 import Button from '@/components/ButtonComponent.vue'
 import ScrollableComponent from '@/components/ScrollableComponent.vue'
 import { MetricType } from '@/model/MetricType'
-import SearchBarComponent from '@/components/SearchBarComponent.vue'
 import TextInformation from '@/components/TextInformation.vue'
-import type { ComparisonListElement } from '@/model/ComparisonListElement'
 import MetricSelector from '@/components/optionsSelectors/MetricSelector.vue'
 import ToolTipComponent from '@/components/ToolTipComponent.vue'
 import OptionsSelector from '@/components/optionsSelectors/OptionsSelectorComponent.vue'
-import type { Overview } from '@/model/Overview'
+import { Overview } from '@/model/Overview'
 
 const props = defineProps({
   overview: {
@@ -133,85 +139,6 @@ const props = defineProps({
   }
 })
 
-const searchString = ref('')
-
-/**
- * This funtion gets called when the search bar for the compariosn table has been updated.
- * It updates the displayed comparisons to only show the ones that  have part of any search result in their id. The search is not case sensitive. The parts can be seprarated by commas or spaces.
- * It also updates the annonmous set to unhide a submission if its name was typed in the search bar at any point in time.
- *
- * @param newVal The new value of the search bar
- */
-function getFilteredComparisons(comparisons: ComparisonListElement[]) {
-  const searches = searchString.value
-    .trimEnd()
-    .toLowerCase()
-    .split(/ +/g)
-    .map((s) => s.trim().replace(/,/g, ''))
-  if (searches.length == 0) {
-    return comparisons
-  }
-
-  return comparisons.filter((c) => {
-    const id1 = c.firstSubmissionId.toLowerCase()
-    const id2 = c.secondSubmissionId.toLowerCase()
-    return searches.some((s) => id1.includes(s) || id2.includes(s))
-  })
-}
-
-function getSortedComparisons(comparisons: ComparisonListElement[]) {
-  comparisons.sort(
-    (a, b) =>
-      b.similarities[store().uiState.comparisonTableSortingMetric] -
-      a.similarities[store().uiState.comparisonTableSortingMetric]
-  )
-  let index = 0
-  comparisons.forEach((c) => {
-    c.sortingPlace = index++
-  })
-  return props.overview.topComparisons
-}
-
-const displayedComparisons = computed(() => {
-  const comparisons = getFilteredComparisons(getSortedComparisons(props.overview.topComparisons))
-  let index = 1
-  comparisons.forEach((c) => {
-    c.id = index++
-  })
-  return comparisons
-})
-
-// Update the anonymous set
-watch(searchString, () => {
-  const searches = searchString.value
-    .trimEnd()
-    .toLowerCase()
-    .split(/ +/g)
-    .map((s) => s.trim().replace(/,/g, ''))
-  if (searches.length == 0) {
-    return
-  }
-
-  for (const search of searches) {
-    for (const submissionId of store().getSubmissionIds) {
-      if (submissionId.toLowerCase() == search) {
-        store().state.anonymous.delete(submissionId)
-      }
-    }
-  }
-})
-
-/**
- * Sets the annonymous set to empty if it is full or adds all submission ids to it if it is not full
- */
-function changeAnnoymousForAll() {
-  if (store().state.anonymous.size == store().getSubmissionIds.length) {
-    store().state.anonymous.clear()
-  } else {
-    store().state.anonymous = new Set(store().getSubmissionIds)
-  }
-}
-
 const hasMoreSubmissionPaths = computed(() => props.overview.submissionFolderPath.length > 1)
 const submissionPathValue = computed(() =>
   hasMoreSubmissionPaths.value
@@ -219,17 +146,8 @@ const submissionPathValue = computed(() =>
     : props.overview.submissionFolderPath[0]
 )
 
-onErrorCaptured((e) => {
-  console.log(e)
-  router.push({
-    name: 'ErrorView',
-    state: {
-      message: 'Overview.json could not be found!',
-      to: '/',
-      routerInfo: 'back to FileUpload page'
-    }
-  })
-  store().clearStore()
+onErrorCaptured((error) => {
+  redirectOnError(error, 'Error displaying overview:\n')
   return false
 })
 </script>

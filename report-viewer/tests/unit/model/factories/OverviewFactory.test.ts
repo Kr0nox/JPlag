@@ -5,6 +5,7 @@ import { HundredValueDistribution } from '@/model/HundredValueDistribution'
 import { TenValueDistribution } from '@/model/TenValueDistribution'
 import validNew from './ValidNewOverview.json'
 import validOld from './ValidOldOverview.json'
+import outdated from './OutdatedOverview.json'
 
 const store = {
   state: {
@@ -56,7 +57,8 @@ describe('Test JSON to Overview', () => {
             [MetricType.MAXIMUM]: 0.9960435212660732
           },
           sortingPlace: 0,
-          id: 1
+          id: 1,
+          clusterIndex: 0
         },
         {
           firstSubmissionId: 'D',
@@ -66,7 +68,8 @@ describe('Test JSON to Overview', () => {
             [MetricType.MAXIMUM]: 0.947289156626506
           },
           sortingPlace: 1,
-          id: 2
+          id: 2,
+          clusterIndex: 0
         },
         {
           firstSubmissionId: 'D',
@@ -76,7 +79,8 @@ describe('Test JSON to Overview', () => {
             [MetricType.MAXIMUM]: 0.947289156626506
           },
           sortingPlace: 2,
-          id: 3
+          id: 3,
+          clusterIndex: 0
         },
         {
           firstSubmissionId: 'B',
@@ -86,7 +90,8 @@ describe('Test JSON to Overview', () => {
             [MetricType.MAXIMUM]: 0.8085106382978723
           },
           sortingPlace: 3,
-          id: 4
+          id: 4,
+          clusterIndex: 0
         },
         {
           firstSubmissionId: 'B',
@@ -96,7 +101,8 @@ describe('Test JSON to Overview', () => {
             [MetricType.MAXIMUM]: 0.9716312056737588
           },
           sortingPlace: 4,
-          id: 5
+          id: 5,
+          clusterIndex: 0
         },
         {
           firstSubmissionId: 'B',
@@ -106,7 +112,8 @@ describe('Test JSON to Overview', () => {
             [MetricType.MAXIMUM]: 0.9716312056737588
           },
           sortingPlace: 5,
-          id: 6
+          id: 6,
+          clusterIndex: 0
         }
       ],
       _distributions: {
@@ -153,7 +160,8 @@ describe('Test JSON to Overview', () => {
             [MetricType.MAXIMUM]: 0.9457364341085271
           },
           sortingPlace: 0,
-          id: 1
+          id: 1,
+          clusterIndex: -1
         },
         {
           firstSubmissionId: 'C',
@@ -163,7 +171,8 @@ describe('Test JSON to Overview', () => {
             [MetricType.MAXIMUM]: 0.83500530023
           },
           sortingPlace: 1,
-          id: 2
+          id: 2,
+          clusterIndex: -1
         }
       ],
       _distributions: {
@@ -173,5 +182,12 @@ describe('Test JSON to Overview', () => {
       _clusters: [],
       _totalComparisons: 6
     })
+  })
+})
+
+describe('Outdated JSON to Overview', () => {
+  it('Outdated version', async () => {
+    store.state.files['overview.json'] = JSON.stringify(outdated)
+    expect(() => OverviewFactory.getOverview()).rejects.toThrowError()
   })
 })
