@@ -17,9 +17,6 @@ jobs:
         with:
           java-version: 21
           distribution: 'temurin'
-              
-      - name: Run Tests
-        run: mvn verify -B -U
         
       - name: Build Assembly
         run: mvn clean package assembly:single
@@ -57,7 +54,7 @@ jobs:
         run: mv *.jar ./jplag.jar
 
       - name: Run JPlag
-        run: java -jar jplag.jar example -r example
+        run: java -jar jplag.jar files -r example
       
       - name: Upload Result
         uses: actions/upload-artifact@v3
