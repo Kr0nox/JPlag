@@ -48,13 +48,13 @@ jobs:
           name: JPlag
       
       - name: Copy and unzip submissions
-        run: unzip ./.github/workflows/files/demoSubmissions.zip
+        run: unzip ./.github/workflows/files/progpedia.zip
       
       - name: Rename jar
         run: mv *.jar ./jplag.jar
 
       - name: Run JPlag
-        run: java -jar jplag.jar files -r example
+        run: java -jar jplag.jar ACCEPTED -bc base -r example
       
       - name: Upload Result
         uses: actions/upload-artifact@v3
