@@ -97,7 +97,7 @@ jobs:
       - name: Run JPlag with basecode
         if: ${{ matrix.dataset.base }}
         run: |
-          java -jar jplag.jar ${{ matrix.dataset.folder }} -l ${{ matrix.dataset.language }} -r ${{ matrix.dataset.name }}-report -bc ${{ matrix.os.base }} ${{ matrix.dataset.cliArgs }}
+          java -jar jplag.jar ${{ matrix.dataset.folder }} -l ${{ matrix.dataset.language }} -r ${{ matrix.dataset.name }}-report -bc ${{ matrix.dataset.base }} ${{ matrix.dataset.cliArgs }}
 
       - name: Run JPlag without basecode
         if: ${{ !matrix.dataset.base }}
