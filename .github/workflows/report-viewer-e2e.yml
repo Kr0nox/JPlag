@@ -65,7 +65,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         dataset: [
-          {zip: "progpedia.zip", name: "progpedia", folder: "ACCEPTED", base: "base", language: "java", cliArgs: "-bc base"}
+          {zip: "progpedia.zip", name: "progpedia", folder: "ACCEPTED", language: "java", cliArgs: "-bc base"},
+          {zip: "progpedia.zip", name: "progpedia2", folder: "ACCEPTED", language: "java", cliArgs: ""}
           ]
 
     steps:
@@ -94,7 +95,6 @@ jobs:
           unzip .github/workflows/files/${{ matrix.dataset.zip }}
 
       - name: Run JPlag
-        if: ${{ !matrix.dataset.base }}
         run: |
           java -jar jplag.jar ${{ matrix.dataset.folder }} -l ${{ matrix.dataset.language }} -r ${{ matrix.dataset.name }}-report ${{ matrix.dataset.cliArgs }}
       
@@ -134,20 +134,9 @@ jobs:
       - name: Download JPlag Reports
         uses: actions/download-artifact@v4
         with:
-          name: "progpedia-${{ matrix.os }}"
+          name: "*-${{ matrix.os }}"
           path: "report-viewer/tests/e2e/assets"
-
-      - name: Rename Files windows
-        if: ${{ matrix.os == 'windows-latest' }}
-        working-directory: report-viewer/tests/e2e/assets
-        run: |
-          ren progpedia-report.zip progpedia.zip
-      
-      - name: Rename Files macos and ubuntu
-        if: ${{ matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'}}
-        working-directory: report-viewer/tests/e2e/assets
-        run: |
-          mv progpedia-report.zip progpedia.zip
+          merge-multiple: true
 
       - name: Run tests
         working-directory: report-viewer
