@@ -147,14 +147,15 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         working-directory: report-viewer/tests/e2e/assets
         run: |
-          ren progpedia-${{matrix.os}}.zip progpedia.zip
+          ren progpedia-report.zip progpedia.zip
       
       - name: Rename Files macos and ubuntu
         if: ${{ matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'}}
         working-directory: report-viewer/tests/e2e/assets
         run: |
           ls
-          mv progpedia-${{matrix.os}}.zip progpedia.zip
+          mv progpedia-report.zip progpedia.zip
+          ls
 
       - name: Run tests 🧪
         working-directory: report-viewer
