@@ -134,7 +134,7 @@ jobs:
       - name: Download JPlag Reports
         uses: actions/download-artifact@v4
         with:
-          name: "*-${{ matrix.os }}"
+          pattern: "*-${{ matrix.os }}"
           path: "report-viewer/tests/e2e/assets"
           merge-multiple: true
 
