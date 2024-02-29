@@ -58,6 +58,7 @@ jobs:
         with:
           name: "JPlag"
           path: "cli/target/jplag.jar"
+          retention-days: 30
 
   run_jplag:
     needs: build_jar
@@ -68,6 +69,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         dataset: [
           {zip: "progpedia.zip", name: "progpedia", folder: "ACCEPTED", base: "base", language: "java", cliArgs: ""},
+          {zip: "progpedia.zip", name: "prog2", folder: "ACCEPTED", language: "java", cliArgs: ""}
           ]
 
     steps:
@@ -110,6 +112,7 @@ jobs:
         with:
           name: "${{ matrix.dataset.name }}-${{ matrix.os }}"
           path: "${{ matrix.dataset.name }}-report.zip"
+          retention-days: 30
 
   e2e_test:
     needs: run_jplag
@@ -153,9 +156,7 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'}}
         working-directory: report-viewer/tests/e2e/assets
         run: |
-          ls
           mv progpedia-report.zip progpedia.zip
-          ls
 
       - name: Run tests 🧪
         working-directory: report-viewer
