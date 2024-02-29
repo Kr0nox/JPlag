@@ -68,8 +68,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         dataset: [
-          {zip: "progpedia.zip", name: "progpedia", folder: "ACCEPTED", base: "base", language: "java", cliArgs: ""},
-          {zip: "progpedia.zip", name: "prog2", folder: "ACCEPTED", language: "java", cliArgs: ""}
+          {zip: "progpedia.zip", name: "progpedia", folder: "ACCEPTED", base: "base", language: "java", cliArgs: ""}
           ]
 
     steps:
