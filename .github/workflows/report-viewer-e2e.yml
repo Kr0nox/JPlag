@@ -86,9 +86,9 @@ jobs:
 
       - name: Copy and unzip dataset
         run: |
-          if [${{matrix.os}} == "windows-latest"]; then
+          if ["${{matrix.os}}" == "windows-latest"]; then
             Expand-Archive -LiteralPath .github/workflows/files/${{ matrix.dataset.zip }} -DestinationPath ./
-          elif [${{matrix.os}} == "macos-latest"]; then
+          elif ["${{matrix.os}}" == "macos-latest"]; then
             unzip .github/workflows/files/${{ matrix.dataset.zip }} -d ./
           else
             unzip ./ .github/workflows/files/${{ matrix.dataset.zip }}
