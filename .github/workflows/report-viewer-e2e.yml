@@ -141,7 +141,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: "progpedia-${{ matrix.os }}"
-          path: "report-viewer/tests/e2e/assets/progpedia.zip"
+          path: "report-viewer/tests/e2e/assets"
 
       - name: Rename Files Windows
         if: ${{ matrix.os == 'windows-latest' }}
