@@ -84,23 +84,25 @@ jobs:
         with:
           name: JPlag
 
-      - name: Copy and unzip dataset
+      - name: Copy and unzip dataset Windows
+        if: ${{ matrix.os == 'windows-latest' }}
         run: |
-          if ["${{matrix.os}}" == "windows-latest"]; then
-            Expand-Archive -LiteralPath .github/workflows/files/${{ matrix.dataset.zip }} -DestinationPath ./
-          elif ["${{matrix.os}}" == "macos-latest"]; then
-            unzip .github/workflows/files/${{ matrix.dataset.zip }} -d ./
-          else
-            unzip ./ .github/workflows/files/${{ matrix.dataset.zip }}
-          fi
+          Expand-Archive -LiteralPath .github/workflows/files/${{ matrix.dataset.zip }} -DestinationPath ./
       
-      - name: Run JPlag
+      - name: Copy and unzip dataset macos and ubuntu
+        if: ${{ matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'}}
         run: |
-          if [${{matrix.dataset.base}} == "undefined"]; then
-            java -jar jplag.jar ${{ matrix.dataset.folder }} -l ${{ matrix.dataset.language }} -r ${{ matrix.dataset.name }}-report ${{ matrix.dataset.cliArgs }}
-          else
-            java -jar jplag.jar ${{ matrix.dataset.folder }} -l ${{ matrix.dataset.language }} -r ${{ matrix.dataset.name }}-report -bc ${{ matrix.os.base }} ${{ matrix.dataset.cliArgs }}
-          fi
+          unzip .github/workflows/files/${{ matrix.dataset.zip }}
+      
+      - name: Run JPlag with basecode
+        if: ${{ matrix.dataset.base }}
+        run: |
+          java -jar jplag.jar ${{ matrix.dataset.folder }} -l ${{ matrix.dataset.language }} -r ${{ matrix.dataset.name }}-report -bc ${{ matrix.os.base }} ${{ matrix.dataset.cliArgs }}
+
+      - name: Run JPlag without basecode
+        if: ${{ !matrix.dataset.base }}
+        run: |
+          java -jar jplag.jar ${{ matrix.dataset.folder }} -l ${{ matrix.dataset.language }} -r ${{ matrix.dataset.name }}-report ${{ matrix.dataset.cliArgs }}
       
       - name: Upload Result
         uses: actions/upload-artifact@v4
