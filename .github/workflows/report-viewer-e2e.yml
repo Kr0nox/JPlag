@@ -153,6 +153,7 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'}}
         working-directory: report-viewer/tests/e2e/assets
         run: |
+          ls
           mv progpedia-${{matrix.os}}.zip progpedia.zip
 
       - name: Run tests 🧪
