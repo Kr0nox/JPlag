@@ -63,6 +63,7 @@ jobs:
     needs: build_jar
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         dataset: [
@@ -114,6 +115,7 @@ jobs:
     needs: run_jplag
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
@@ -141,14 +143,17 @@ jobs:
           name: "progpedia-${{ matrix.os }}"
           path: "report-viewer/tests/e2e/assets/progpedia.zip"
 
-      - name: Rename Files
+      - name: Rename Files Windows
+        if: ${{ matrix.os == 'windows-latest' }}
         working-directory: report-viewer/tests/e2e/assets
         run: |
-          if [${{matrix.os}} == "windows-latest"]; then
-            ren progpedia-${{matrix.os}}.zip progpedia.zip
-          else
-            mv progpedia-${{matrix.os}}.zip progpedia.zip
-          fi
+          ren progpedia-${{matrix.os}}.zip progpedia.zip
+      
+      - name: Rename Files macos and ubuntu
+        if: ${{ matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'}}
+        working-directory: report-viewer/tests/e2e/assets
+        run: |
+          mv progpedia-${{matrix.os}}.zip progpedia.zip
 
       - name: Run tests 🧪
         working-directory: report-viewer
