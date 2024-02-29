@@ -47,7 +47,7 @@ jobs:
       - name: Build Assembly
         run: mvn -Pwith-report-viewer -DskipTests clean package assembly:single
       
-      - name: Raname Jar
+      - name: Rename Jar
         run: mv cli/target/jplag-*-jar-with-dependencies.jar cli/target/jplag.jar
   
       - name: Upload Assembly
@@ -65,11 +65,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         dataset: [
-          {zip: "progpedia.zip", name: "progpedia", folder: "ACCEPTED", base: "base", language: "java", cliArgs: ""}
+          {zip: "progpedia.zip", name: "progpedia", folder: "ACCEPTED", base: "base", language: "java", cliArgs: "-bc base"}
           ]
 
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up JDK
@@ -83,7 +83,7 @@ jobs:
         with:
           name: JPlag
 
-      - name: Copy and unzip dataset Windows
+      - name: Copy and unzip dataset windows
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           Expand-Archive -LiteralPath .github/workflows/files/${{ matrix.dataset.zip }} -DestinationPath ./
@@ -92,18 +92,13 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'}}
         run: |
           unzip .github/workflows/files/${{ matrix.dataset.zip }}
-      
-      - name: Run JPlag with basecode
-        if: ${{ matrix.dataset.base }}
-        run: |
-          java -jar jplag.jar ${{ matrix.dataset.folder }} -l ${{ matrix.dataset.language }} -r ${{ matrix.dataset.name }}-report -bc ${{ matrix.dataset.base }} ${{ matrix.dataset.cliArgs }}
 
-      - name: Run JPlag without basecode
+      - name: Run JPlag
         if: ${{ !matrix.dataset.base }}
         run: |
           java -jar jplag.jar ${{ matrix.dataset.folder }} -l ${{ matrix.dataset.language }} -r ${{ matrix.dataset.name }}-report ${{ matrix.dataset.cliArgs }}
       
-      - name: Upload Result
+      - name: Upload result
         uses: actions/upload-artifact@v4
         with:
           name: "${{ matrix.dataset.name }}-${{ matrix.os }}"
@@ -119,20 +114,20 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout
         uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: "18"
 
-      - name: Install and Build 🔧
+      - name: Install and Build
         working-directory: report-viewer
         run: |
           npm install
           npm run build
         
-      - name: Install playwright 🔧
+      - name: Install playwright
         working-directory: report-viewer
         run: npx playwright install --with-deps
 
@@ -142,7 +137,7 @@ jobs:
           name: "progpedia-${{ matrix.os }}"
           path: "report-viewer/tests/e2e/assets"
 
-      - name: Rename Files Windows
+      - name: Rename Files windows
         if: ${{ matrix.os == 'windows-latest' }}
         working-directory: report-viewer/tests/e2e/assets
         run: |
@@ -154,12 +149,12 @@ jobs:
         run: |
           mv progpedia-report.zip progpedia.zip
 
-      - name: Run tests 🧪
+      - name: Run tests
         working-directory: report-viewer
         run: |
           npm run test:e2e
 
-      - name: Upload test results 📤
+      - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
