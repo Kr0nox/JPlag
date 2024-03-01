@@ -44,8 +44,11 @@ test('Test comparison table and comparsion view', async ({ page }) => {
   expect(comparisonTableOverviewFilteredAC).toMatch(/3anon[0-9]+A/)
   expect(comparisonTableOverviewFilteredAC).toMatch(/4anon[0-9]+C/)+/*/
 
+  await page.getByText('Show All').click()
+  await page.getByPlaceholder('Filter/Unhide Comparisons').fill('Blue')
+  await page.waitForTimeout(100)
   // go to comparison page
-  await page.goto('comparison/Blue Antelope-Lime Lynx.json')
+  await page.getByText('100Blue AntelopeLime Lynx').click()
   await page.waitForURL(/\/comparison\/.*/)
 
   // check for elements in comparison page
