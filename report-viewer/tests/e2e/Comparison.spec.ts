@@ -46,6 +46,7 @@ test('Test comparison table and comparsion view', async ({ page }) => {
 
   await page.getByText('Show All').click()
   await page.getByPlaceholder('Filter/Unhide Comparisons').fill('Blue')
+  await page.waitForTimeout(100)
   // go to comparison page
   await page.getByText('Blue AntelopeLime Lynx').click()
   await page.waitForURL(/\/comparison\/.*/)
