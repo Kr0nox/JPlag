@@ -120,8 +120,6 @@ class Error:
         return True
     def is_warning(self):
         return False
-    def pretty_print(self):
-        pass
 
 class TsError(Error):
     def actions_print(self):
@@ -221,7 +219,7 @@ def runForPair(java_file, typescript_file):
     if errors:
         print(f"Found {len(errors)} errors:")
         for error in errors:
-            print(error.pretty_print())
+            print(error)
         print("") # Add a newline for better readability
 
     _warnings = [a.actions_print() for a in annotations if a.is_warning()]
@@ -229,7 +227,7 @@ def runForPair(java_file, typescript_file):
     if warnings:
         print(f"Found {len(warnings)} warnings:")
         for warning in warnings:
-            print(warning.pretty_print())
+            print(warning)
     
     return len(errors) > 0
 
