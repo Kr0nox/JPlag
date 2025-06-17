@@ -1,0 +1,20 @@
+name: Test Match
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check_coverage:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@v4
+      
+    - name: Run script
+      working-directory: .github/workflows/scripts
+      run: |
+        python matchJson.py

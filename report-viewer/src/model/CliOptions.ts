@@ -6,7 +6,7 @@ export type ReportFormatCliOptions = AbstractOptions<string>
 
 interface AbstractOptions<L> {
   language: L
-  minimumTokenMatch: number
+  minimumTokenMatch: string
   submissionDirectories: string[]
   oldSubmissionDirectories: string[]
   baseCodeSubmissionDirectory: File
