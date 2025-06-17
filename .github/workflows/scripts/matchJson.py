@@ -125,13 +125,13 @@ class TsError(Error):
     def actions_print(self):
         return [
             f"::error file={getAbsoluteFilePath(self.file_path)},line={self.line_number},title=Variable not found in Java equivalent::TypeScript variable '{self.variable[1]}' ({self.variable[0]}) does not match any Java variable in {getAbsoluteFilePath(self.other_file_path)}.",
-            f"::error file={getAbsoluteFilePath(self.other_file_path)},line={self.line_number},title=Missing variable from TypeScript equivalent::Java record should have a variable equivalent to '{self.variable[1]}' ({self.variable[0]}) from {getAbsoluteFilePath(self.file_path)} at line {self.line_number}."
+            f"::error file={getAbsoluteFilePath(self.other_file_path)},line={self.other_line_number},title=Missing variable from TypeScript equivalent::Java record should have a variable equivalent to '{self.variable[1]}' ({self.variable[0]}) from {getAbsoluteFilePath(self.file_path)} at line {self.line_number}."
         ]
 class JavaError(Error):
     def actions_print(self):
         return [
             f"::error file={getAbsoluteFilePath(self.file_path)},line={self.line_number},title=Variable not found in TypeScript equivalent::Java variable '{self.variable[1]}' ({self.variable[0]}) does not match any TypeScript variable in {getAbsoluteFilePath(self.other_file_path)}.",
-            f"::error file={getAbsoluteFilePath(self.other_file_path)},line={self.line_number},title=Missing variable from Java equivalent::TypeScript interface should have a variable equivalent to '{self.variable[1]}' ({self.variable[0]}) from {getAbsoluteFilePath(self.file_path)} at line {self.line_number}."
+            f"::error file={getAbsoluteFilePath(self.other_file_path)},line={self.other_line_number},title=Missing variable from Java equivalent::TypeScript interface should have a variable equivalent to '{self.variable[1]}' ({self.variable[0]}) from {getAbsoluteFilePath(self.file_path)} at line {self.line_number}."
         ]
 
 
