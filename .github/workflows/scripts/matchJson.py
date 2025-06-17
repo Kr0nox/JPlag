@@ -103,13 +103,10 @@ class Warning:
         return False
     def is_warning(self):
         return True
-    def is_debug(self):
-        return False
-    def pretty_print(self):
-        return f"Warning: Type of Java variable '{self.java_variable[1]}' ({self.java_variable[0]}) in {getPrettyFilePath(self.java_file_path)} at line {self.java_line_number} does not match TypeScript variable '{self.typescript_variable[1]}' ({self.typescript_variable[0]}) in {getPrettyFilePath(self.typescript_file_path)} at line {self.typescript_line_number}."
     def actions_print(self):
         return [
-            f"::warning file={getAbsoluteFilePath(self.java_file_path)},line={self.java_line_number},title=Variable types do not match::Nachricht"
+            f"::warning file={getAbsoluteFilePath(self.java_file_path)},line={self.java_line_number},title=Variable types do not match::Type of Java variable '{self.java_variable[1]}' ({self.java_variable[0]}) does not match TypeScript variable '{self.typescript_variable[1]}' ({self.typescript_variable[0]}) in {getAbsoluteFilePath(self.typescript_file_path)} at line {self.typescript_line_number}.",
+            f"::warning file={getAbsoluteFilePath(self.typescript_file_path)},line={self.typescript_line_number},tile=Variable types do not match::Type of TypeScript variable '{self.typescript_variable[1]}' ({self.typescript_variable[0]}) does not match Java variable '{self.java_variable[1]}' ({self.java_variable[0]}) in {getAbsoluteFilePath(self.java_file_path)} at line {self.java_line_number}."
         ]
 
 class Error:
@@ -123,33 +120,21 @@ class Error:
         return True
     def is_warning(self):
         return False
-    def is_debug(self):
-        return False
     def pretty_print(self):
         pass
-    def actions_print(self):
-        return [
-            f"::error file={getAbsoluteFilePath(self.file_path)},line={self.line_number},title=Variable mismatch::Nachricht"
-        ]
 
 class TsError(Error):
-    def pretty_print(self):
-        return f"Error: TypeScript variable '{self.variable[1]}' ({self.variable[0]}) in {getPrettyFilePath(self.file_path)} at line {self.line_number} does not match any Java variable in {getPrettyFilePath(self.other_file_path)}."
+    def actions_print(self):
+        return [
+            f"::error file={getAbsoluteFilePath(self.file_path)},line={self.line_number},title=Variable not found in Java equivalent::TypeScript variable '{self.variable[1]}' ({self.variable[0]}) does not match any Java variable in {getAbsoluteFilePath(self.other_file_path)}.",
+            f"::error file={getAbsoluteFilePath(self.other_file_path)},line={self.line_number},title=Missing variable from TypeScript equivalent::Java record should have a variable equivalent to '{self.variable[1]}' ({self.variable[0]}) from {getAbsoluteFilePath(self.file_path)} at line {self.line_number}."
+        ]
 class JavaError(Error):
-    def pretty_print(self):
-        return f"Error: Java variable '{self.variable[1]}' ({self.variable[0]}) in {getPrettyFilePath(self.file_path)} at line {self.line_number} does not match any TypeScript variable in {getPrettyFilePath(self.other_file_path)}."
-
-class Debug:
-    def __init__(self, message):
-        self.message = message
-    def is_error(self):
-        return False
-    def is_warning(self):
-        return False
-    def is_debug(self):
-        return True
-    def pretty_print(self):
-        return f"Debug: {self.message}"
+    def actions_print(self):
+        return [
+            f"::error file={getAbsoluteFilePath(self.file_path)},line={self.line_number},title=Variable not found in TypeScript equivalent::Java variable '{self.variable[1]}' ({self.variable[0]}) does not match any TypeScript variable in {getAbsoluteFilePath(self.other_file_path)}.",
+            f"::error file={getAbsoluteFilePath(self.other_file_path)},line={self.line_number},title=Missing variable from Java equivalent::TypeScript interface should have a variable equivalent to '{self.variable[1]}' ({self.variable[0]}) from {getAbsoluteFilePath(self.file_path)} at line {self.line_number}."
+        ]
 
 
 def findLineNumber(lines, subtext):
@@ -231,18 +216,16 @@ def runForPair(java_file, typescript_file):
         print("No mismatches found.")
         return False
 
-    for annotation in annotations:
-        for action in annotation.actions_print():
-            print(action)
-
-    errors = [a for a in annotations if a.is_error()]
+    _errors = [a.actions_print() for a in annotations if a.is_error()]
+    errors = [item for sub_list in _errors for item in sub_list]
     if errors:
         print(f"Found {len(errors)} errors:")
         for error in errors:
             print(error.pretty_print())
         print("") # Add a newline for better readability
 
-    warnings = [a for a in annotations if a.is_warning()]
+    _warnings = [a.actions_print() for a in annotations if a.is_warning()]
+    warnings = [item for sub_list in _warnings for item in sub_list]
     if warnings:
         print(f"Found {len(warnings)} warnings:")
         for warning in warnings:
