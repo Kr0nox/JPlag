@@ -49,12 +49,13 @@ import io.soabase.recordbuilder.core.RecordBuilder;
  * @param debugParser If true, submissions that cannot be parsed will be stored in a separate directory.
  */
 @RecordBuilder()
-public record JPlagOptions(@JsonSerialize(using = LanguageSerializer.class) Language language, Integer minimumTokenMatch,
+public record JPlagOptions(
+    @JsonSerialize(using = LanguageSerializer.class) Language language, Integer minimumTokenMatch,
         @JsonSerialize(contentUsing = FileSerializer.class) Set<File> submissionDirectories,
         @JsonSerialize(contentUsing = FileSerializer.class) Set<File> oldSubmissionDirectories,
         @JsonSerialize(using = FileSerializer.class) File baseCodeSubmissionDirectory, String subdirectoryName, List<String> fileSuffixes,
         String exclusionFileName, SimilarityMetric similarityMetric, double similarityThreshold, int maximumNumberOfComparisons,
-        ClusteringOptions clusteringOptions, boolean debugParser, MergingOptions mergingOptions, boolean normalize)
+        ClusteringOptions clusteringOptions, MergingOptions mergingOptions, boolean normalize)
         implements JPlagOptionsBuilder.With {
 
     public static final double DEFAULT_SIMILARITY_THRESHOLD = 0;
