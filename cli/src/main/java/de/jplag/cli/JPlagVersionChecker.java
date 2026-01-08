@@ -50,7 +50,7 @@ public class JPlagVersionChecker {
             if (newest.compareTo(current) > 0) {
                 return Optional.of(newest);
             }
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException _) {
             logger.info(WARNING_UNABLE_TO_FETCH);
         } catch (Exception e) {
             logger.warn(UNEXPECTED_ERROR, e);

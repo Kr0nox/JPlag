@@ -1,10 +1,16 @@
 package de.jplag.cli.logger;
 
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.event.Level;
+
+import de.jplag.logging.ProgressBar;
+import de.jplag.logging.ProgressBarType;
 
 class IdleBarTest {
     private static final String TEST_BAR_TEXT = "Test";
@@ -38,6 +44,17 @@ class IdleBarTest {
         for (int i = 0; i < TARGET_FRAME_NUMBER; i++) {
             checkIdleBarOutput(animationFrames[i], i, numberOfSpaces);
         }
+    }
+
+    @Test
+    void testInitIdleBar() {
+        Level originalLogLevel = CollectedLogger.getLogLevel();
+        CollectedLogger.setLogLevel(Level.INFO);
+
+        ProgressBar progressBar = new CliProgressBarProvider().initProgressBar(ProgressBarType.CLUSTERING, 10);
+        assertInstanceOf(IdleBar.class, progressBar);
+
+        CollectedLogger.setLogLevel(originalLogLevel);
     }
 
     /**

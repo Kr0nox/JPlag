@@ -1,4 +1,4 @@
-package de.jplag.cli;
+package de.jplag.cli.cli;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,6 @@ import java.util.List;
 public class ArgumentBuilder {
     private final List<String> arguments;
 
-    /**
-     * New instance, prefer using {@link CommandLineInterfaceTest#arguments()} or
-     * {@link CommandLineInterfaceTest#defaultArguments()}.
-     */
     public ArgumentBuilder() {
         this.arguments = new ArrayList<>();
     }
