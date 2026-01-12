@@ -15,11 +15,18 @@ import de.jplag.comparison.LongestCommonSubsequenceSearch;
 import de.jplag.exceptions.ExitException;
 import de.jplag.exceptions.RootDirectoryException;
 import de.jplag.exceptions.SubmissionException;
+import de.jplag.highlightextraction.MatchWeighting;
 import de.jplag.merging.MatchMerging;
 import de.jplag.options.JPlagOptions;
 
 /**
- * This class coordinates the whole errorConsumer flow.
+ * Main class for JPlag. Manages the whole source code plagiarism detection pipeline. Provides methods to run
+ * comparisons on source code submissions, manage options, and log results. *
+ * <p>
+ * <b>Acknowledgments:</b> JPlag was originally created by Guido Malpohl and others (IPD Tichy) at Karlsruhe Institute
+ * of Technology and revived by Timur Saglam and Sebastian Hahner. See <a href="https://jplag.de/">jplag.de</a> for more
+ * information.
+ * </p>
  */
 public class JPlag {
     private static final Logger logger = LoggerFactory.getLogger(JPlag.class);
@@ -89,6 +96,12 @@ public class JPlag {
         // Use Match Merging against obfuscation
         if (options.mergingOptions().enabled()) {
             result = new MatchMerging(options).mergeMatchesOf(result);
+        }
+
+        if (options.frequencyAnalysisOptions().enabled()) {
+            MatchWeighting matchWeighter = new MatchWeighting(options.frequencyAnalysisOptions());
+            List<JPlagComparison> frequencyWeightedComparisons = matchWeighter.useMatchFrequencyToInfluenceSimilarity(result);
+            result = new JPlagResult(frequencyWeightedComparisons, submissionSet, result.getDuration(), options);
         }
 
         if (logger.isInfoEnabled()) {
