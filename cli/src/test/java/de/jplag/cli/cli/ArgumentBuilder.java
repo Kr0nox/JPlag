@@ -9,6 +9,9 @@ import java.util.List;
 public class ArgumentBuilder {
     private final List<String> arguments;
 
+    /**
+     * New instance
+     */
     public ArgumentBuilder() {
         this.arguments = new ArrayList<>();
     }

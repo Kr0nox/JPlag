@@ -12,6 +12,9 @@ import de.jplag.java.JavaLanguage;
 import de.jplag.options.JPlagOptions;
 import de.jplag.util.FileUtils;
 
+/**
+ * Provides a simple {@link JPlagResult} for tests to use. The tests should not depend on the contents of the result.
+ */
 public class ExampleResult {
     private static final String exampleCode = """
             public class A {
@@ -20,6 +23,11 @@ public class ExampleResult {
 
     private static JPlagResult result;
 
+    /**
+     * @return The example result
+     * @throws IOException If no temp files can be created
+     * @throws ExitException If JPlag throws an exception
+     */
     public static JPlagResult getExampleResult() throws IOException, ExitException {
         if (result == null) {
             File dir = Files.createTempDirectory("jplagCode").toFile();
