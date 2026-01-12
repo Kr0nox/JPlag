@@ -4,7 +4,13 @@ import de.jplag.testutils.LanguageModuleTest;
 import de.jplag.testutils.datacollector.TestDataCollector;
 import de.jplag.testutils.datacollector.TestSourceIgnoredLinesCollector;
 
+/**
+ * Configures the tests for the c language module
+ */
 public class CLanguageModuleTests extends LanguageModuleTest {
+    /**
+     * New instance
+     */
     public CLanguageModuleTests() {
         super(new CLanguage(), CTokenType.class);
     }
