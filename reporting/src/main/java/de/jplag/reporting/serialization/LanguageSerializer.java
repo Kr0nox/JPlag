@@ -1,4 +1,4 @@
-package de.jplag.serializer;
+package de.jplag.reporting.serialization;
 
 import java.io.IOException;
 import java.io.Serial;

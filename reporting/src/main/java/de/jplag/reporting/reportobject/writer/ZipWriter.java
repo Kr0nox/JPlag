@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.jplag.FilePathUtil;
+import de.jplag.reporting.serialization.JacksonUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ZipWriter implements JPlagResultWriter {
     private static final Logger logger = LoggerFactory.getLogger(ZipWriter.class);
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = JacksonUtils.createNewObjectMapper();
 
     private static final String WRITE_JSON_ERROR = "Failed to write JSON entry %s";
     private static final String COPY_FILE_ERROR = "Failed to copy file (%s) to entry (%s)";
