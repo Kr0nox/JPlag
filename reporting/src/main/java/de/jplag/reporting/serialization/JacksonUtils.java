@@ -8,14 +8,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 /**
- * Provides utility functions for Jackson
+ * Provides utility functions for Jackson.
  */
 public class JacksonUtils {
     private JacksonUtils() {
     }
 
     /**
-     * Creates a new ObjectMapper configured to use JPlag specific serializers
+     * Creates a new ObjectMapper configured to use JPlag specific serializers.
      * @return The object mapper
      */
     public static ObjectMapper createNewObjectMapper() {
