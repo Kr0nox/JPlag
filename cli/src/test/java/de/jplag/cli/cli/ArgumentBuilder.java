@@ -10,7 +10,7 @@ public class ArgumentBuilder {
     private final List<String> arguments;
 
     /**
-     * New instance
+     * New instance.
      */
     public ArgumentBuilder() {
         this.arguments = new ArrayList<>();
