@@ -1,5 +1,5 @@
-import de.jplag.c.CLanguage;
-import de.jplag.c.CTokenType;
+package de.jplag.c;
+
 import de.jplag.testutils.LanguageModuleTest;
 import de.jplag.testutils.datacollector.TestDataCollector;
 import de.jplag.testutils.datacollector.TestSourceIgnoredLinesCollector;
