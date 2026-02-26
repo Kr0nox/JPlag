@@ -23,6 +23,7 @@ public class JacksonUtils {
         SimpleModule module = new SimpleModule();
         module.addSerializer(File.class, new FileSerializer());
         module.addSerializer(Language.class, new LanguageSerializer());
+        module.addSerializer(Enum.class, new EnumSerializer());
         mapper.registerModule(module);
         return mapper;
     }
