@@ -14,6 +14,6 @@ class SerializationTest {
     void testEnumSerialization() throws JsonProcessingException {
         ObjectMapper mapper = JacksonUtils.createNewObjectMapper();
 
-        assertEquals(ClusteringAlgorithm.SPECTRAL.name(), mapper.writeValueAsString(ClusteringAlgorithm.SPECTRAL));
+        assertEquals("\"" + ClusteringAlgorithm.SPECTRAL.name() + "\"", mapper.writeValueAsString(ClusteringAlgorithm.SPECTRAL));
     }
 }
