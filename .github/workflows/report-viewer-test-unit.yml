@@ -67,6 +67,13 @@ jobs:
               body: body
             })
 
+      - name: Upload coverage results
+        uses: actions/upload-artifact@v6
+        with:
+          name: "coverage-report"
+          path: report-viewer/coverage/html
+          retention-days: 30
+
       - name: Fail on low coverage
         run: |
           echo "Coverage: ${{ steps.generate.outputs.COVERAGE }}"
