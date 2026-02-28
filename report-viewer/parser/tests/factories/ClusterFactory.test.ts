@@ -16,7 +16,3 @@ describe('Test JSON to Cluster list', () => {
     expect(result[1].index).toBe(1)
   })
 })
-
-describe('Dummy', () => {
-  expect(1).toEqual(5)
-})

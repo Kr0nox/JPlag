@@ -63,6 +63,9 @@ jobs:
             \`\`\`
             <details>
             <summary>Per File Coverage</summary>
+            \`\`\`
+            ${detailContent}
+            \`\`\`
             </details>`
             github.issues.createComment({
               issue_number: context.issue.number,
@@ -81,6 +84,6 @@ jobs:
       - name: Fail on low coverage
         run: |
           echo "Coverage: ${{ steps.generate.outputs.COVERAGE }}"
-          if [ ${{ steps.generate.outputs.COVERAGE }} -lt 50 ]; then
+          if [ ${{ steps.generate.outputs.COVERAGE }} -lt 80 ]; then
             exit 1
           fi

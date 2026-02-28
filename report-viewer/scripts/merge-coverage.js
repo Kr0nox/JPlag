@@ -30,7 +30,7 @@ reports.create('html', { subdir: 'html' }).execute(context)
 // export summary for github actions to allow it to fail
 const githubOutput = process.env.GITHUB_OUTPUT
 if (githubOutput) {
-  appendFileSync(githubOutput, `COVERAGE_LINES=${coverageMap.getCoverageSummary().lines.pct}\n`)
+  appendFileSync(githubOutput, `COVERAGE=${coverageMap.getCoverageSummary().lines.pct}\n`)
 }
 
 console.log('Merged Coverage Reports')
