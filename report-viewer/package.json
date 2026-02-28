@@ -6,8 +6,8 @@
   "workspaces": [
     "report-viewer/",
     "ui-components/",
-    "model/",
-    "parser/"
+    "parser/",
+    "model/"
   ],
   "scripts": {
     "format": "prettier --write .",
