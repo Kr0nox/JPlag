@@ -72,7 +72,7 @@ jobs:
               if (!comment.body.includes('Coverage')) {
                 continue;
               }
-              await github.rest.issues.deleteComment({
+              await github.issues.deleteComment({
                 owner,
                 repo,
                 comment_id: comment.id,
