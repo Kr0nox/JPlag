@@ -9,7 +9,8 @@ on:
       - "report-viewer/**"
 
 permissions:
-  issues: 'write'
+  issues: write
+  pull_request: write 
 
 jobs:
   pre_job:
