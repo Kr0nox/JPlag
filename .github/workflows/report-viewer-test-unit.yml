@@ -69,7 +69,7 @@ jobs:
               if (comment.user.login !== 'github-actions[bot]') {
                 continue;
               }
-              if (!comment.body.join('').includes('Coverage')) {
+              if (!comment.body.includes('Coverage')) {
                 continue;
               }
               await github.rest.issues.deleteComment({
