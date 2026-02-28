@@ -7,6 +7,11 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     exclude: [...configDefaults.exclude],
-    root: fileURLToPath(new URL('./', import.meta.url))
+    root: fileURLToPath(new URL('./', import.meta.url)),
+    coverage: {
+      provider: 'v8',
+      reporter: ['json'],
+      reportsDirectory: './coverage'
+    }
   }
 })

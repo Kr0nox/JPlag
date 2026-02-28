@@ -5,6 +5,6 @@
   "types": "src/index.ts",
   "scripts": {
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage"
   }
 }

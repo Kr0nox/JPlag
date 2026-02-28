@@ -12,7 +12,7 @@
     "test:e2e": "playwright test",
     "test:unit": "vitest",
     "preview": "vite preview",
-    "coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
