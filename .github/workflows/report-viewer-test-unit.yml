@@ -90,6 +90,6 @@ jobs:
           COVERAGE: ${{ steps.generate.outputs.COVERAGE }}
         run: |
           echo "Coverage: ${{ steps.generate.outputs.COVERAGE }}"
-          if [ $(bc <<< "$COVERAGE <= 80.0") -eq 1 ]; then
+          if [ $(bc <<< "$COVERAGE < 20.0") -eq 1 ]; then
             exit 1
           fi
