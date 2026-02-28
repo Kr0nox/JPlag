@@ -8,6 +8,9 @@ on:
       - ".github/workflows/report-viewer-test-unit.yml"
       - "report-viewer/**"
 
+permissions:
+  issues: 'write'
+
 jobs:
   pre_job:
     runs-on: ubuntu-latest
