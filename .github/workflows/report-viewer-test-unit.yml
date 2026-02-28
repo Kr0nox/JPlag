@@ -86,8 +86,10 @@ jobs:
           retention-days: 30
 
       - name: Fail on low coverage
+        env:
+          COVERAGE: ${{ steps.generate.outputs.COVERAGE }}
         run: |
           echo "Coverage: ${{ steps.generate.outputs.COVERAGE }}"
-          if (( $(echo "${COVERAGE} < 50" | bc -l) )); then
+          if [ $(bc <<< "$COVERAGE <= 80.0") -eq 1 ]; then
             exit 1
           fi
