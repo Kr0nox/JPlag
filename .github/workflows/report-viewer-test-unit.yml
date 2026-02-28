@@ -59,9 +59,6 @@ jobs:
             \`\`\`
             <details>
             <summary>Per File Coverage</summary>
-            \`\`\`
-            ${detailContent}
-            \`\`\`
             </details>`
             github.issues.createComment({
               issue_number: context.issue.number,
