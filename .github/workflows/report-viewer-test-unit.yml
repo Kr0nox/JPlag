@@ -53,6 +53,17 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            const comments = await github.paginate(
+                github.rest.issues.listComments,
+                {
+                  owner,
+                  repo,
+                  issue_number,
+                  per_page: 100,
+                }
+              )
+            console.log(comments, comments[0], comments[1])
+
             const fs = require('fs');
             const path = require('path');
             const basePath = path.join(process.cwd(), 'report-viewer/coverage/');
