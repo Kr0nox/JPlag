@@ -10,7 +10,7 @@ on:
 
 permissions:
   issues: write
-  pull_request: write 
+  pull-requests: write 
 
 jobs:
   pre_job:
