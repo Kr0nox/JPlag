@@ -39,8 +39,9 @@ jobs:
       - name: Install and run tests and merge-reports
         id: generate
         working-directory: report-viewer
+        env:
+          COLUMNS: 120
         run: |
-          export COLUMNS=200
           npm install
           npm run test:coverage
           npm run merge-coverage
@@ -64,6 +65,7 @@ jobs:
             \`\`\`
             <details>
             <summary>Per File Coverage</summary>
+
             \`\`\`
             ${detailContent}
             \`\`\`
