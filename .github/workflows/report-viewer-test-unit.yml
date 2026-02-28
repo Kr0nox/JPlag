@@ -56,9 +56,9 @@ jobs:
             const comments = await github.paginate(
                 github.issues.listComments,
                 {
-                  "Kr0nox",
-                  "JPlag",
-                  3,
+                  owner: "Kr0nox",
+                  repo: "JPlag",
+                  issue_number: 3,
                   per_page: 100,
                 }
               )
