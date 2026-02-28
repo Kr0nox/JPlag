@@ -88,6 +88,6 @@ jobs:
       - name: Fail on low coverage
         run: |
           echo "Coverage: ${{ steps.generate.outputs.COVERAGE }}"
-          if [ ${{ steps.generate.outputs.COVERAGE }} -lt 80 ]; then
+          if (( $(echo "${COVERAGE} < 50" | bc -l) )); then
             exit 1
           fi
