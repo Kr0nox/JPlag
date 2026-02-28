@@ -32,23 +32,47 @@ jobs:
         with:
           node-version: "lts/*"
 
-      - name: Install
+      - name: Install and run tests and merge-reports
+        id: generate
         working-directory: report-viewer
         run: |
           npm install
-      - name: Test model
-        working-directory: report-viewer/model
+          npm run test:coverage
+          npm run merge-coverage
+      
+      - name: Post comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const basePath = path.join(process.cwd(), 'report-viewer/coverage/');
+            const summaryPath = path.join(basePath, 'summary.txt');
+            const detailPath = path.join(basePath, 'detail.txt');
+
+            const summaryContent = fs.readFileSync(summaryPath, 'utf8').trim();
+            const detailContent = fs.readFileSync(detailPath, 'utf8').trim();
+            const body = `\`\`\`
+            ${summaryContent}
+            \`\`\`
+            <details>
+            <summary>Per File Coverage</summary>
+            \`\`\`
+            ${detailContent}
+            \`\`\`
+            </details>`
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 
+            })
+
+      - name: Fail on low coverage
         run: |
-          npm run test
-      - name: Test parser
-        working-directory: report-viewer/parser
-        run: |
-          npm run test
-      - name: Test ui-components
-        working-directory: report-viewer/ui-components
-        run: |
-          npm run test
-      - name: Test report-viewer
-        working-directory: report-viewer/report-viewer
-        run: |
-          npm run test:unit
+          echo "Coverage: ${{ steps.generate.outputs.COVERAGE }}"
+          if [ ${{ steps.generate.outputs.COVERAGE }} -lt 50 ]; then
+            exit 1
+          fi
