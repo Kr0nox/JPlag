@@ -31,8 +31,11 @@ reports.create('html', { subdir: 'html' }).execute(context)
 const githubOutput = process.env.GITHUB_OUTPUT
 console.log(githubOutput, process.env.GITHUB_OUTPUT)
 if (githubOutput) {
+  const oldContent = readFileSync(githubOutput)
   console.log('append')
   appendFileSync(githubOutput, `COVERAGE=${coverageMap.getCoverageSummary().lines.pct}\n`)
+  const newContent = readFileSync(githubOutput)
+  console.log(oldContent, newContent)
 }
 console.log(githubOutput, process.env.GITHUB_OUTPUT)
 
