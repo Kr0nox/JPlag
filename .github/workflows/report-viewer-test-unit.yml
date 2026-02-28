@@ -53,16 +53,31 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            const owner = "Kr0nox"
+            const repo = "JPlag"
+            const issueNumber = 3
             const comments = await github.paginate(
                 github.issues.listComments,
                 {
-                  owner: "Kr0nox",
-                  repo: "JPlag",
-                  issue_number: 3,
+                  owner,
+                  repo,
+                  issue_number: issueNumber,
                   per_page: 100,
                 }
               )
-            console.log(comments, comments[0], comments[1])
+            for (const comment of comments) {
+              if (comment.user.login !== 'github-actions[bot]') {
+                continue;
+              }
+              if (!comment.body.join('').includes('Coverage')) {
+                continue;
+              }
+              await github.rest.issues.deleteComment({
+                owner,
+                repo,
+                comment_id: comment.id,
+              })
+            }
 
             const fs = require('fs');
             const path = require('path');
