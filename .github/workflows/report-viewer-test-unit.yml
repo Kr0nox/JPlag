@@ -40,6 +40,7 @@ jobs:
         id: generate
         working-directory: report-viewer
         run: |
+          export COLUMNS=200
           npm install
           npm run test:coverage
           npm run merge-coverage
