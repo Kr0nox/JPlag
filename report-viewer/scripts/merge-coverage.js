@@ -24,7 +24,7 @@ const context = iReport.createContext({
 })
 
 reports.create('text-summary', { file: 'summary.txt' }).execute(context)
-reports.create('text', { file: 'detail.txt', maxCols: 200 }).execute(context)
+reports.create('text', { file: 'detail.txt', maxCols: 200, skipEmpty: true }).execute(context)
 reports.create('html', { subdir: 'html' }).execute(context)
 
 // export summary for github actions to allow it to fail
