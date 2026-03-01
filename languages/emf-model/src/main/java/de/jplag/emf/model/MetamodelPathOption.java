@@ -26,10 +26,10 @@ public class MetamodelPathOption implements LanguageOption<String> {
     private static final String ALL_EXTENSIONS = "*";
     private static final String PATH_SEPARATOR = ",";
 
-    private static final String METAPACKAGE_ERROR = "Error, not a metapackage: ";
+    private static final String METAPACKAGE_ERROR = "Error, not a metapackage: {}";
     private static final String METAMODEL_LOADING_ERROR = "Could not load metamodel file {}";
     private static final String NOT_A_METAMODEL_ERROR = "Metamodel file does not end in .ecore: {}";
-    private static final String NOT_A_FILE_ERROR = "Metamodel file does not exist: {}";
+    private static final String NOT_A_FILE_ERROR = "Metamodel path does not point to a valid file: {}";
 
     private String value;
 
@@ -71,7 +71,7 @@ public class MetamodelPathOption implements LanguageOption<String> {
 
     private void parseMetamodelFileIfValid(String path) {
         File file = new File(path.trim());
-        if (!file.exists()) {
+        if (!file.exists() || !file.isFile()) {
             logger.error(NOT_A_FILE_ERROR, path.trim());
         } else if (!file.getName().endsWith(EmfLanguage.FILE_ENDING)) {
             logger.error(NOT_A_METAMODEL_ERROR, path.trim());
@@ -85,15 +85,16 @@ public class MetamodelPathOption implements LanguageOption<String> {
         Resource modelResource = EMFUtil.loadModelResource(file);
         if (modelResource == null) {
             logger.error(METAMODEL_LOADING_ERROR, file);
-        }
-        for (EObject object : modelResource.getContents()) {
-            if (object instanceof EPackage ePackage) {
-                metapackages.add(ePackage);
-            } else {
-                logger.error(METAPACKAGE_ERROR, object);
+        } else {
+            for (EObject object : modelResource.getContents()) {
+                if (object instanceof EPackage ePackage) {
+                    metapackages.add(ePackage);
+                } else {
+                    logger.error(METAPACKAGE_ERROR, object);
+                }
             }
+            EMFUtil.registerEPackageURIs(metapackages);
         }
-        EMFUtil.registerEPackageURIs(metapackages);
     }
 
 }
