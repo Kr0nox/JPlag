@@ -21,6 +21,7 @@ import com.google.auto.service.AutoService;
 @AutoService(Language.class)
 public class EmfModelLanguage extends DynamicEmfLanguage {
 
+    private static final String NO_METAMODEL_ERROR = "EMF model language module requires metamodel to be specified via language options!";
     private final EmfLanguageOptions options;
 
     /**
@@ -57,6 +58,9 @@ public class EmfModelLanguage extends DynamicEmfLanguage {
 
     @Override
     public List<Token> parse(Set<File> files, boolean normalize) throws ParsingException {
+        if (!options.getMetamodelPathOption().hasValue()) {
+            throw new ParsingException(files.iterator().next(), NO_METAMODEL_ERROR);
+        }
         return new DynamicModelParser().parse(files, normalize);
     }
 
