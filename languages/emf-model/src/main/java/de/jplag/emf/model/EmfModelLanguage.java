@@ -14,14 +14,21 @@ import de.jplag.options.LanguageOptions;
 import com.google.auto.service.AutoService;
 
 /**
- * Language for EMF metamodels from the Eclipse Modeling Framework (EMF). This language is based on a dynamically
- * created token set.
+ * Language for models conforming to the Eclipse Modeling Framework (EMF). This language is based on a dynamically
+ * created token set. When using the language, the metamodel files have to be passed via the language options.
  * @author Timur Saglam
  */
 @AutoService(Language.class)
 public class EmfModelLanguage extends DynamicEmfLanguage {
 
-    private final EmfLanguageOptions options = new EmfLanguageOptions();
+    private final EmfLanguageOptions options;
+
+    /**
+     * Creates the language and its language options.
+     */
+    public EmfModelLanguage() {
+        options = new EmfLanguageOptions();
+    }
 
     @Override
     public List<String> fileExtensions() {

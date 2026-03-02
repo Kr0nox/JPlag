@@ -72,9 +72,9 @@ public class MetamodelPathOption implements LanguageOption<String> {
     private void parseMetamodelFileIfValid(String path) {
         File file = new File(path.trim());
         if (!file.exists() || !file.isFile()) {
-            logger.error(NOT_A_FILE_ERROR, path.trim());
+            logger.error(NOT_A_FILE_ERROR, file);
         } else if (!file.getName().endsWith(EmfLanguage.FILE_ENDING)) {
-            logger.error(NOT_A_METAMODEL_ERROR, path.trim());
+            logger.error(NOT_A_METAMODEL_ERROR, file);
         } else {
             parseMetamodelFile(file);
         }
