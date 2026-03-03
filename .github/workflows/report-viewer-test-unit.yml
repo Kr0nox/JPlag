@@ -84,7 +84,7 @@ jobs:
             const summaryPath = path.join(basePath, 'summary.txt');
             const detailPath = path.join(basePath, 'detail.txt');
             const globber = await glob.create('report-viewer/*/coverage/summary.txt');
-            const packageSummaryPaths = await globber.glob();
+            const packageSummaryPaths = (await globber.glob()).sort();
 
             const summaryContent = fs.readFileSync(summaryPath, 'utf8').trim();
             const detailContent = fs.readFileSync(detailPath, 'utf8').trim();
