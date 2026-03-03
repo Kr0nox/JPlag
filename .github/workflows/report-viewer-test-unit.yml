@@ -54,6 +54,7 @@ jobs:
             const owner = "Kr0nox"
             const repo = "JPlag"
             const issueNumber = 3
+            // Delete old comments
             const comments = await github.paginate(
                 github.issues.listComments,
                 {
@@ -82,12 +83,24 @@ jobs:
             const basePath = path.join(process.cwd(), 'report-viewer/coverage/');
             const summaryPath = path.join(basePath, 'summary.txt');
             const detailPath = path.join(basePath, 'detail.txt');
+            const globber = await glob.create('report-viewer/**/coverage/summary.txt');
+            const packageSummaryPaths = await globber.glob();
 
             const summaryContent = fs.readFileSync(summaryPath, 'utf8').trim();
             const detailContent = fs.readFileSync(detailPath, 'utf8').trim();
+            const packageSummaries = packageSummaryPaths.map(p => {
+              const content = fs.readFileSync(p, 'utf8').trim();
+              const name = path.relative(basePath, p).split('/')[0];
+              return `### ${name}\n\`\`\`\n${content}\n\`\`\``;
+            }).join('\n');
             const body = `\`\`\`
             ${summaryContent}
             \`\`\`
+            <details>
+            <summary>Per Package Coverage</summary>
+
+            ${packageSummaries}
+            </details>
             <details>
             <summary>Per File Coverage</summary>
 
