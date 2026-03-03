@@ -90,7 +90,7 @@ jobs:
             const detailContent = fs.readFileSync(detailPath, 'utf8').trim();
             const packageSummaries = packageSummaryPaths.map(p => {
               const content = fs.readFileSync(p, 'utf8').trim();
-              const name = path.relative(path.join(process.cwd(), 'report-viewer/'), p).split('/')[1];
+              const name = path.relative(path.join(process.cwd(), 'report-viewer/'), p).split('/')[0];
               return `### ${name}\n\`\`\`\n${content}\n\`\`\``;
             }).join('\n');
             const body = `\`\`\`
