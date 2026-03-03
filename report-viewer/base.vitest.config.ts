@@ -5,7 +5,8 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['json', ['text-summary', { file: 'summary.txt' }]],
-      reportsDirectory: './coverage'
+      reportsDirectory: './coverage',
+      exclude: ['**/tests/**']
     }
   }
 })
