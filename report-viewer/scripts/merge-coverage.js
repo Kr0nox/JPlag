@@ -1,12 +1,13 @@
 import iCoverage from 'istanbul-lib-coverage'
 import iReport from 'istanbul-lib-report'
-import { sync } from 'glob'
 import { appendFileSync, existsSync, mkdirSync, readFileSync, rmSync } from 'fs'
 import reports from 'istanbul-reports'
 
 const coverageMap = iCoverage.createCoverageMap({})
 
-const files = sync('*/coverage/coverage-final.json')
+const files = ['parser', 'model', 'ui-components', 'report-viewer'].map(
+  (pkg) => `${pkg}/coverage/coverage-final.json`
+)
 
 files.forEach((file) => {
   const coverage = JSON.parse(readFileSync(file, 'utf-8'))

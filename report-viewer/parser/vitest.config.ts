@@ -1,11 +1,4 @@
 import { defineConfig } from 'vite'
+import baseVitestConfig from '../base.vitest.config'
 
-export default defineConfig({
-  test: {
-    coverage: {
-      provider: 'v8',
-      reporter: ['json'],
-      reportsDirectory: './coverage'
-    }
-  }
-})
+export default baseVitestConfig

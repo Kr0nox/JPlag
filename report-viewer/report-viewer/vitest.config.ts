@@ -1,13 +1,12 @@
-import { defineConfig } from 'vite'
+import { defineConfig, mergeConfig } from 'vite'
 import { configDefaults } from 'vitest/config'
+import baseVitestConfig from '../base.vitest.config'
 
-export default defineConfig({
-  test: {
-    exclude: [...configDefaults.exclude, 'tests/e2e/*', 'src/views', 'src/viewWrapper'],
-    coverage: {
-      provider: 'v8',
-      reporter: ['json'],
-      reportsDirectory: './coverage'
+export default mergeConfig(
+  baseVitestConfig,
+  defineConfig({
+    test: {
+      exclude: [...configDefaults.exclude, 'tests/e2e/*', 'src/views', 'src/viewWrapper']
     }
-  }
-})
+  })
+)
