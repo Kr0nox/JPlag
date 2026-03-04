@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 /**
- * Serializes any object with just it's simple classname converted to uppercase
+ * Serializes any object with just it's simple classname converted to uppercase.
  */
 public class SimpleClassNameSerializer extends StdSerializer<Object> {
     protected SimpleClassNameSerializer() {
