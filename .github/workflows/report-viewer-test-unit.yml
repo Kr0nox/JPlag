@@ -53,7 +53,7 @@ jobs:
           script: |
             const owner = "Kr0nox"
             const repo = "JPlag"
-            const issueNumber = 3
+            const issueNumber = ${{ github.event.pull_request.number }}
             // Delete old comments
             const comments = await github.paginate(
                 github.issues.listComments,
