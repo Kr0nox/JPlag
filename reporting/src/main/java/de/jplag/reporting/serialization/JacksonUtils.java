@@ -3,6 +3,7 @@ package de.jplag.reporting.serialization;
 import java.io.File;
 
 import de.jplag.Language;
+import de.jplag.highlightextraction.WeightingFunction;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -24,6 +25,7 @@ public class JacksonUtils {
         module.addSerializer(File.class, new FileSerializer());
         module.addSerializer(Language.class, new LanguageSerializer());
         module.addSerializer(Enum.class, new EnumSerializer());
+        module.addSerializer(WeightingFunction.class, new SimpleClassNameSerializer());
         mapper.registerModule(module);
         return mapper;
     }
