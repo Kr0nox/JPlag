@@ -8,7 +8,7 @@
         <version>${revision}</version>
     </parent>
     <artifactId>reporting</artifactId>
-    <name>JPlag: Reporting</name>
+    <name>JPlag: Report Generator</name>
     <description>Contains utilities for writing reports in various formats</description>
     <dependencies>
         <dependency>
