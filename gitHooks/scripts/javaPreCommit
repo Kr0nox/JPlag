@@ -11,22 +11,21 @@ set +e
 
 echo Checking spotless
 mvn spotless:check &> /dev/null
-exitCode=$?
+result=0
 
-if [ $exitCode -gt 0 ]
+if [ $? -gt 0 ]
 then
 	echo "Spotless failed. Please run 'mvn spotless:apply' to fix."
-	exit 1
+	result=1
 fi
 
 echo Running Checkstyle
 mvn checkstyle:check &> /dev/null
-exitCode=$?
 
-if [ $exitCode -gt 0 ]
+if [ $? -gt 0 ]
 then
   echo "Checkstyle failed. Please run 'mvn checkstyle:check' to get a list of issues."
-  exit 1
+	result=1
 fi
 
-exit 0
+exit $result
