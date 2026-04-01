@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import de.jplag.ParsingException;
 import de.jplag.Token;
-import de.jplag.TokenPrinter;
+import de.jplag.TokenPrinterUtils;
 import de.jplag.TokenType;
 import de.jplag.emf.EmfLanguage;
 import de.jplag.testutils.FileUtil;
@@ -49,7 +48,7 @@ class MinimalDynamicMetamodelTest {
         List<File> testFiles = Arrays.stream(TEST_SUBJECTS).map(path -> new File(BASE_PATH.toFile(), path)).toList();
         List<Token> result = language.parse(new HashSet<>(testFiles), true);
         List<TokenType> tokenTypes = result.stream().map(Token::getType).toList();
-        logger.debug(TokenPrinter.printTokens(result, baseDirectory, Optional.of(EmfLanguage.VIEW_FILE_EXTENSION)));
+        logger.debug(TokenPrinterUtils.printTokensByFile(result, file -> new File(file.getAbsolutePath() + EmfLanguage.VIEW_FILE_EXTENSION)));
         logger.info("parsed token types: " + tokenTypes.stream().map(TokenType::getDescription).toList());
         assertEquals(94, tokenTypes.size());
         assertEquals(7, new HashSet<>(tokenTypes.stream().filter(DynamicMetamodelTokenType.class::isInstance).toList()).size());
