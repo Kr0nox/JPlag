@@ -10,14 +10,29 @@ import java.util.function.Function;
 
 import de.jplag.util.FileUtils;
 
+/**
+ * Utility functions for {@link TokenPrinter}.
+ */
 public class TokenPrinterUtils {
     private TokenPrinterUtils() {
     }
 
+    /**
+     * Prints the all tokens sorted by their files.
+     * @param tokens The token to print
+     * @return The files with token annotations
+     */
     public static String printTokensByFile(List<Token> tokens) {
         return printTokensByFile(tokens, Function.identity());
     }
 
+    /**
+     * Prints the all tokens sorted by their files.
+     * @param tokens The token to print
+     * @param fileMapper Maps the file of each token to a different one. Can be used if the file of the token doesn't match
+     * the source file
+     * @return The files with token annotations
+     */
     public static String printTokensByFile(List<Token> tokens, Function<File, File> fileMapper) {
         Map<File, List<Token>> groups = groupByFile(tokens);
 
@@ -37,6 +52,13 @@ public class TokenPrinterUtils {
         return outputBuilder.toString();
     }
 
+    /**
+     * Print the tokens assuming they belong to the given file.
+     * @param tokens The tokens to print
+     * @param file The file
+     * @return The printed tokens
+     * @throws IOException If the file cannot be read
+     */
     public static String printTokensForFile(List<Token> tokens, File file) throws IOException {
         return new TokenPrinter(List.of(FileUtils.readFileContent(file).split(System.lineSeparator())), tokens).printTokens();
     }
