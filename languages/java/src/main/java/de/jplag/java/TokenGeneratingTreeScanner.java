@@ -414,7 +414,7 @@ final class TokenGeneratingTreeScanner extends TreeScanner<Void, Void> {
         }
         if (start > end) {
             // implicit constructor call for ENUMS - identifier is not present in code, so end needs to be fixed.
-            end = positions.getEndPosition(ast, node);
+            end = positions.getEndPosition(ast, node) - 1;
         }
         addToken(JavaTokenType.J_NEWCLASS, start, end, new CodeSemantics());
         super.visitNewClass(node, null);
@@ -490,11 +490,12 @@ final class TokenGeneratingTreeScanner extends TreeScanner<Void, Void> {
     public Void visitVariable(VariableTree node, Void unused) {
         if (!node.getName().contentEquals(ANONYMOUS_VARIABLE_NAME)) {
             long start = positions.getStartPosition(ast, node);
-            long end = positions.getEndPosition(ast, node) - 1;
-            if (Objects.nonNull(node.getInitializer()) && !node.toString().contains(ENUM_MARKER)) {
+            long end = positions.getEndPosition(ast, node);
+            if (Objects.isNull(node.getInitializer())) {
                 // VARDEF token should end before the start of the assigned value.
-                // enum initializers are implicit - no need to subtract.
-                end -= node.getInitializer() == null ? 0 : node.getInitializer().toString().length();
+                end -= 1;
+            } else if (!node.toString().contains(ENUM_MARKER)) { // enum initializers are implicit - no need to subtract.
+                end -= node.getInitializer().toString().length();
             }
             String name = node.getName().toString();
             boolean inLocalScope = variableRegistry.inLocalScope();
