@@ -492,11 +492,13 @@ final class TokenGeneratingTreeScanner extends TreeScanner<Void, Void> {
             long start = positions.getStartPosition(ast, node);
             long end = positions.getEndPosition(ast, node);
             if (Objects.isNull(node.getInitializer())) {
-                // VARDEF token should end before the start of the assigned value.
+                // VARDEF token should end before semicolon
                 end -= 1;
-            } else if (!node.toString().contains(ENUM_MARKER)) { // enum initializers are implicit - no need to subtract.
+            } else if (!node.toString().contains(ENUM_MARKER)) {
+                // VARDEF token should end before assigned value
                 end -= node.getInitializer().toString().length();
-            }
+            } // else: for enum constants, end is already correct.
+
             String name = node.getName().toString();
             boolean inLocalScope = variableRegistry.inLocalScope();
             // this presents a problem when classes are declared in local scopes, which can happen in ad-hoc implementations
