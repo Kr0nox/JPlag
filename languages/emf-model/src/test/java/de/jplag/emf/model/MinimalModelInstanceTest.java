@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import de.jplag.ParsingException;
 import de.jplag.Token;
 import de.jplag.TokenPrinter;
-import de.jplag.emf.EmfLanguage;
 import de.jplag.testutils.FileUtil;
 
 class MinimalModelInstanceTest {
@@ -53,7 +52,7 @@ class MinimalModelInstanceTest {
         try {
             List<Token> tokens = language.parse(new HashSet<>(baseFiles), true);
             assertNotEquals(0, tokens.size());
-            logger.debug(TokenPrinter.printTokens(tokens, baseDirectory, Optional.of(EmfLanguage.VIEW_FILE_EXTENSION)));
+            logger.debug(TokenPrinter.printTokens(tokens, baseDirectory, Optional.of(EmfModelLanguage.VIEW_FILE_EXTENSION)));
             logger.info("Parsed tokens: " + tokens);
             assertEquals(7, tokens.size());
         } catch (ParsingException e) {
@@ -64,7 +63,7 @@ class MinimalModelInstanceTest {
 
     @AfterEach
     public void tearDown() {
-        FileUtil.clearFiles(new File(BASE_PATH.toString()), EmfLanguage.VIEW_FILE_EXTENSION);
+        FileUtil.clearFiles(new File(BASE_PATH.toString()), EmfModelLanguage.VIEW_FILE_EXTENSION);
     }
 
 }
