@@ -97,10 +97,6 @@
         </dependency>
         <dependency>
             <groupId>de.jplag</groupId>
-            <artifactId>emf-metamodel-dynamic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.jplag</groupId>
             <artifactId>emf-model</artifactId>
         </dependency>
         <dependency>

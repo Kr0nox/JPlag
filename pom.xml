@@ -287,11 +287,6 @@
                 <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
                 <version>${version.emf.ecore-xmi}</version>
             </dependency>
-            <dependency>
-                <groupId>de.jplag</groupId>
-                <artifactId>emf-metamodel-dynamic</artifactId>
-                <version>${revision}</version>
-            </dependency>
 
             <!-- Scala -->
             <dependency>

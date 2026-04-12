@@ -14,7 +14,6 @@
         <module>cpp</module>
         <module>csharp</module>
         <module>emf-metamodel</module>
-        <module>emf-metamodel-dynamic</module>
         <module>emf-model</module>
         <module>golang</module>
         <module>java</module>
