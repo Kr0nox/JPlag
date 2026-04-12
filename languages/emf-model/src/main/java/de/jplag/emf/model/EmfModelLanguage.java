@@ -21,6 +21,7 @@ import com.google.auto.service.AutoService;
 @AutoService(Language.class)
 public class EmfModelLanguage extends EmfLanguage {
 
+    /** File extension for the textual view. **/
     public static final String VIEW_FILE_EXTENSION = ".treeview";
 
     private static final String NO_METAMODEL_ERROR = "EMF model language module requires metamodel to be specified via language options!";

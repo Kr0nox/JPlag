@@ -10,7 +10,7 @@ For the token extraction, we visit the containment tree of the model and extract
 
 ### Usage
 The input for this is an EMF metamodel and a set of corresponding instances.
-To use this module, add the `emf-model` subcommand in the CLI, or use a `JPlagOption` object with `new DynamicEmfLanguage()` as `language` in the Java API as described in the usage information in the [readme of the main project](https://github.com/jplag/JPlag#usage) and [in the wiki](https://github.com/jplag/JPlag/wiki/1.-How-to-Use-JPlag).
+To use this module, add the `emf-model` subcommand in the CLI, or use a `JPlagOption` object with `new EmfModelLanguage()` as `language` in the Java API as described in the usage information in the [readme of the main project](https://github.com/jplag/JPlag#usage) and [in the wiki](https://github.com/jplag/JPlag/wiki/1.-How-to-Use-JPlag).
 
 In order to correctly parse model instances, the required metamodel files need to be specified. This can be done via the language options of the `emf-model` language (see the language options via `jplag.jar emf-model -h`). Specify one or more metamodel files like this (multiple paths are comma-separated):
 
