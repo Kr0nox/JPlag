@@ -7,8 +7,8 @@ import java.util.Set;
 import de.jplag.Language;
 import de.jplag.ParsingException;
 import de.jplag.Token;
-import de.jplag.emf.dynamic.DynamicEmfLanguage;
-import de.jplag.emf.model.parser.DynamicModelParser;
+import de.jplag.emf.EmfLanguage;
+import de.jplag.emf.model.parser.EmfModelParser;
 import de.jplag.options.LanguageOptions;
 
 import com.google.auto.service.AutoService;
@@ -19,7 +19,9 @@ import com.google.auto.service.AutoService;
  * @author Timur Saglam
  */
 @AutoService(Language.class)
-public class EmfModelLanguage extends DynamicEmfLanguage {
+public class EmfModelLanguage extends EmfLanguage {
+
+    public static final String VIEW_FILE_EXTENSION = ".treeview";
 
     private static final String NO_METAMODEL_ERROR = "EMF model language module requires metamodel to be specified via language options!";
     private final EmfLanguageOptions options;
@@ -47,8 +49,13 @@ public class EmfModelLanguage extends DynamicEmfLanguage {
     }
 
     @Override
+    public int minimumTokenMatch() {
+        return 10;
+    }
+
+    @Override
     public String viewFileExtension() {
-        return ".treeview";
+        return VIEW_FILE_EXTENSION;
     }
 
     @Override
@@ -61,7 +68,7 @@ public class EmfModelLanguage extends DynamicEmfLanguage {
         if (!options.getMetamodelPathOption().hasValue()) {
             throw new ParsingException(files.iterator().next(), NO_METAMODEL_ERROR);
         }
-        return new DynamicModelParser().parse(files, normalize);
+        return new EmfModelParser().parse(files, normalize);
     }
 
     @Override
