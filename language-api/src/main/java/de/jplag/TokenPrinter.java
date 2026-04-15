@@ -77,7 +77,7 @@ public class TokenPrinter {
             outputBuilder.append("0".repeat(lineNumberLength - lineNumber.length()));
             outputBuilder.append(lineNumber);
             outputBuilder.append(" ");
-            outputBuilder.append(fileLines.get(i).replaceAll("\t", " ".repeat(TAB_LENGTH)));
+            outputBuilder.append(fileLines.get(i).replace("\t", " ".repeat(TAB_LENGTH)));
             outputBuilder.append(System.lineSeparator());
 
             continuations = printSourceLineTokens(continuations, i + 1);

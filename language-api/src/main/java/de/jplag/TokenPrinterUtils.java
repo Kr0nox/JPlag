@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import de.jplag.util.FileUtils;
 
@@ -23,7 +23,7 @@ public class TokenPrinterUtils {
      * @return The files with token annotations
      */
     public static String printTokensByFile(List<Token> tokens) {
-        return printTokensByFile(tokens, Function.identity());
+        return printTokensByFile(tokens, UnaryOperator.identity());
     }
 
     /**
@@ -33,15 +33,15 @@ public class TokenPrinterUtils {
      * the source file
      * @return The files with token annotations
      */
-    public static String printTokensByFile(List<Token> tokens, Function<File, File> fileMapper) {
+    public static String printTokensByFile(List<Token> tokens, UnaryOperator<File> fileMapper) {
         Map<File, List<Token>> groups = groupByFile(tokens);
 
         StringBuilder outputBuilder = new StringBuilder();
 
-        for (File file : groups.keySet()) {
-            outputBuilder.append(file.getAbsolutePath()).append(":").append(System.lineSeparator());
+        for (Map.Entry<File, List<Token>> entry : groups.entrySet()) {
+            outputBuilder.append(entry.getKey().getAbsolutePath()).append(":").append(System.lineSeparator());
             try {
-                outputBuilder.append(printTokensForFile(groups.get(file), fileMapper.apply(file))).append(System.lineSeparator())
+                outputBuilder.append(printTokensForFile(entry.getValue(), fileMapper.apply(entry.getKey()))).append(System.lineSeparator())
                         .append(System.lineSeparator());
             } catch (IOException e) {
                 outputBuilder.append("Could not print tokens: ").append(System.lineSeparator());
@@ -67,7 +67,7 @@ public class TokenPrinterUtils {
         Map<File, List<Token>> groups = new HashMap<>();
 
         for (Token token : tokens) {
-            groups.computeIfAbsent(token.getFile(), (_) -> new ArrayList<>());
+            groups.computeIfAbsent(token.getFile(), _ -> new ArrayList<>());
             groups.get(token.getFile()).add(token);
         }
 

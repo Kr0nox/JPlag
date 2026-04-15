@@ -305,8 +305,7 @@ public abstract class LanguageModuleTest {
 
     private List<Token> parseTokens(TestData source) throws ParsingException, IOException {
         List<Token> tokens = source.parseTokens(this.language);
-        // logger.info(TokenPrinter.printTokens(tokens));
-        logger.info(System.lineSeparator() + new TokenPrinter(List.of(source.getSourceLines()), tokens).printTokens());
+        logger.info("{}{}", System.lineSeparator(), new TokenPrinter(List.of(source.getSourceLines()), tokens).printTokens());
         return tokens;
     }
 
