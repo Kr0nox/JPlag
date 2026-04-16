@@ -1,12 +1,12 @@
 package de.jplag.rust;
 
-import de.jplag.antlr.AbstractAntlrListener;
-import de.jplag.antlr.AbstractAntlrParserAdapter;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import de.jplag.antlr.AbstractAntlrListener;
+import de.jplag.antlr.AbstractAntlrParserAdapter;
 import de.jplag.rust.grammar.RustLexer;
 import de.jplag.rust.grammar.RustParser;
 

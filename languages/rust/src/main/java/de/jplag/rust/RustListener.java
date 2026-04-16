@@ -1,89 +1,5 @@
 package de.jplag.rust;
 
-import de.jplag.antlr.AbstractAntlrListener;
-import de.jplag.rust.grammar.RustParser;
-import de.jplag.rust.grammar.RustParser.ArrayElementsContext;
-import de.jplag.rust.grammar.RustParser.ArrayExpressionContext;
-import de.jplag.rust.grammar.RustParser.AttrInputContext;
-import de.jplag.rust.grammar.RustParser.BreakExpressionContext;
-import de.jplag.rust.grammar.RustParser.CallExpressionContext;
-import de.jplag.rust.grammar.RustParser.CallParamsContext;
-import de.jplag.rust.grammar.RustParser.ClosureExpressionContext;
-import de.jplag.rust.grammar.RustParser.ClosureParamContext;
-import de.jplag.rust.grammar.RustParser.CompoundAssignmentExpressionContext;
-import de.jplag.rust.grammar.RustParser.DelimTokenTreeContext;
-import de.jplag.rust.grammar.RustParser.EnumItemContext;
-import de.jplag.rust.grammar.RustParser.EnumItemTupleContext;
-import de.jplag.rust.grammar.RustParser.EnumerationContext;
-import de.jplag.rust.grammar.RustParser.ExpressionContext;
-import de.jplag.rust.grammar.RustParser.ExpressionStatementContext;
-import de.jplag.rust.grammar.RustParser.ExpressionWithBlockContext;
-import de.jplag.rust.grammar.RustParser.ExternBlockContext;
-import de.jplag.rust.grammar.RustParser.ExternCrateContext;
-import de.jplag.rust.grammar.RustParser.ExternalItemContext;
-import de.jplag.rust.grammar.RustParser.ForLifetimesContext;
-import de.jplag.rust.grammar.RustParser.FunctionParamContext;
-import de.jplag.rust.grammar.RustParser.Function_Context;
-import de.jplag.rust.grammar.RustParser.GenericArgContext;
-import de.jplag.rust.grammar.RustParser.GenericArgsBindingContext;
-import de.jplag.rust.grammar.RustParser.GenericArgsTypesContext;
-import de.jplag.rust.grammar.RustParser.GenericParamContext;
-import de.jplag.rust.grammar.RustParser.IfExpressionContext;
-import de.jplag.rust.grammar.RustParser.IfLetExpressionContext;
-import de.jplag.rust.grammar.RustParser.ImplementationContext;
-import de.jplag.rust.grammar.RustParser.InfiniteLoopExpressionContext;
-import de.jplag.rust.grammar.RustParser.InnerAttributeContext;
-import de.jplag.rust.grammar.RustParser.IteratorLoopExpressionContext;
-import de.jplag.rust.grammar.RustParser.LoopLabelContext;
-import de.jplag.rust.grammar.RustParser.MacroInvocationContext;
-import de.jplag.rust.grammar.RustParser.MacroInvocationSemiContext;
-import de.jplag.rust.grammar.RustParser.MacroPunctuationTokenContext;
-import de.jplag.rust.grammar.RustParser.MacroRuleContext;
-import de.jplag.rust.grammar.RustParser.MacroRulesDefinitionContext;
-import de.jplag.rust.grammar.RustParser.MatchArmContext;
-import de.jplag.rust.grammar.RustParser.MatchArmGuardContext;
-import de.jplag.rust.grammar.RustParser.MatchExpressionContext;
-import de.jplag.rust.grammar.RustParser.ModuleContext;
-import de.jplag.rust.grammar.RustParser.OuterAttributeContext;
-import de.jplag.rust.grammar.RustParser.PathExprSegmentContext;
-import de.jplag.rust.grammar.RustParser.PathInExpressionContext;
-import de.jplag.rust.grammar.RustParser.PatternContext;
-import de.jplag.rust.grammar.RustParser.PredicateLoopExpressionContext;
-import de.jplag.rust.grammar.RustParser.PredicatePatternLoopExpressionContext;
-import de.jplag.rust.grammar.RustParser.ReturnExpressionContext;
-import de.jplag.rust.grammar.RustParser.SelfParamContext;
-import de.jplag.rust.grammar.RustParser.SimplePathContext;
-import de.jplag.rust.grammar.RustParser.StaticItemContext;
-import de.jplag.rust.grammar.RustParser.StructExprFieldContext;
-import de.jplag.rust.grammar.RustParser.StructExpressionContext;
-import de.jplag.rust.grammar.RustParser.StructExpression_Context;
-import de.jplag.rust.grammar.RustParser.StructFieldContext;
-import de.jplag.rust.grammar.RustParser.StructPatternContext;
-import de.jplag.rust.grammar.RustParser.StructPatternFieldContext;
-import de.jplag.rust.grammar.RustParser.Struct_Context;
-import de.jplag.rust.grammar.RustParser.Trait_Context;
-import de.jplag.rust.grammar.RustParser.TupleElementsContext;
-import de.jplag.rust.grammar.RustParser.TupleExpressionContext;
-import de.jplag.rust.grammar.RustParser.TupleFieldContext;
-import de.jplag.rust.grammar.RustParser.TuplePatternContext;
-import de.jplag.rust.grammar.RustParser.TuplePatternItemsContext;
-import de.jplag.rust.grammar.RustParser.TupleStructItemsContext;
-import de.jplag.rust.grammar.RustParser.TupleStructPatternContext;
-import de.jplag.rust.grammar.RustParser.TypeAliasContext;
-import de.jplag.rust.grammar.RustParser.TypeParamContext;
-import de.jplag.rust.grammar.RustParser.Type_Context;
-import de.jplag.rust.grammar.RustParser.Union_Context;
-import de.jplag.rust.grammar.RustParser.UseDeclarationContext;
-import de.jplag.rust.grammar.RustParser.UseTreeContext;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
-
-import java.util.List;
-import java.util.Objects;
-
 import static de.jplag.rust.RustTokenType.APPLY;
 import static de.jplag.rust.RustTokenType.ARGUMENT;
 import static de.jplag.rust.RustTokenType.ARRAY_BODY_END;
@@ -167,6 +83,91 @@ import static de.jplag.rust.RustTokenType.USE_DECLARATION;
 import static de.jplag.rust.RustTokenType.USE_ITEM;
 import static de.jplag.rust.RustTokenType.VARIABLE_DECLARATION;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+
+import de.jplag.antlr.AbstractAntlrListener;
+import de.jplag.rust.grammar.RustParser;
+import de.jplag.rust.grammar.RustParser.ArrayElementsContext;
+import de.jplag.rust.grammar.RustParser.ArrayExpressionContext;
+import de.jplag.rust.grammar.RustParser.AttrInputContext;
+import de.jplag.rust.grammar.RustParser.BreakExpressionContext;
+import de.jplag.rust.grammar.RustParser.CallExpressionContext;
+import de.jplag.rust.grammar.RustParser.CallParamsContext;
+import de.jplag.rust.grammar.RustParser.ClosureExpressionContext;
+import de.jplag.rust.grammar.RustParser.ClosureParamContext;
+import de.jplag.rust.grammar.RustParser.CompoundAssignmentExpressionContext;
+import de.jplag.rust.grammar.RustParser.DelimTokenTreeContext;
+import de.jplag.rust.grammar.RustParser.EnumItemContext;
+import de.jplag.rust.grammar.RustParser.EnumItemTupleContext;
+import de.jplag.rust.grammar.RustParser.EnumerationContext;
+import de.jplag.rust.grammar.RustParser.ExpressionContext;
+import de.jplag.rust.grammar.RustParser.ExpressionStatementContext;
+import de.jplag.rust.grammar.RustParser.ExpressionWithBlockContext;
+import de.jplag.rust.grammar.RustParser.ExternBlockContext;
+import de.jplag.rust.grammar.RustParser.ExternCrateContext;
+import de.jplag.rust.grammar.RustParser.ExternalItemContext;
+import de.jplag.rust.grammar.RustParser.ForLifetimesContext;
+import de.jplag.rust.grammar.RustParser.FunctionParamContext;
+import de.jplag.rust.grammar.RustParser.Function_Context;
+import de.jplag.rust.grammar.RustParser.GenericArgContext;
+import de.jplag.rust.grammar.RustParser.GenericArgsBindingContext;
+import de.jplag.rust.grammar.RustParser.GenericArgsTypesContext;
+import de.jplag.rust.grammar.RustParser.GenericParamContext;
+import de.jplag.rust.grammar.RustParser.IfExpressionContext;
+import de.jplag.rust.grammar.RustParser.IfLetExpressionContext;
+import de.jplag.rust.grammar.RustParser.ImplementationContext;
+import de.jplag.rust.grammar.RustParser.InfiniteLoopExpressionContext;
+import de.jplag.rust.grammar.RustParser.InnerAttributeContext;
+import de.jplag.rust.grammar.RustParser.IteratorLoopExpressionContext;
+import de.jplag.rust.grammar.RustParser.LoopLabelContext;
+import de.jplag.rust.grammar.RustParser.MacroInvocationContext;
+import de.jplag.rust.grammar.RustParser.MacroInvocationSemiContext;
+import de.jplag.rust.grammar.RustParser.MacroPunctuationTokenContext;
+import de.jplag.rust.grammar.RustParser.MacroRuleContext;
+import de.jplag.rust.grammar.RustParser.MacroRulesDefinitionContext;
+import de.jplag.rust.grammar.RustParser.MatchArmContext;
+import de.jplag.rust.grammar.RustParser.MatchArmGuardContext;
+import de.jplag.rust.grammar.RustParser.MatchExpressionContext;
+import de.jplag.rust.grammar.RustParser.ModuleContext;
+import de.jplag.rust.grammar.RustParser.OuterAttributeContext;
+import de.jplag.rust.grammar.RustParser.PathExprSegmentContext;
+import de.jplag.rust.grammar.RustParser.PathInExpressionContext;
+import de.jplag.rust.grammar.RustParser.PatternContext;
+import de.jplag.rust.grammar.RustParser.PredicateLoopExpressionContext;
+import de.jplag.rust.grammar.RustParser.PredicatePatternLoopExpressionContext;
+import de.jplag.rust.grammar.RustParser.ReturnExpressionContext;
+import de.jplag.rust.grammar.RustParser.SelfParamContext;
+import de.jplag.rust.grammar.RustParser.SimplePathContext;
+import de.jplag.rust.grammar.RustParser.StaticItemContext;
+import de.jplag.rust.grammar.RustParser.StructExprFieldContext;
+import de.jplag.rust.grammar.RustParser.StructExpressionContext;
+import de.jplag.rust.grammar.RustParser.StructExpression_Context;
+import de.jplag.rust.grammar.RustParser.StructFieldContext;
+import de.jplag.rust.grammar.RustParser.StructPatternContext;
+import de.jplag.rust.grammar.RustParser.StructPatternFieldContext;
+import de.jplag.rust.grammar.RustParser.Struct_Context;
+import de.jplag.rust.grammar.RustParser.Trait_Context;
+import de.jplag.rust.grammar.RustParser.TupleElementsContext;
+import de.jplag.rust.grammar.RustParser.TupleExpressionContext;
+import de.jplag.rust.grammar.RustParser.TupleFieldContext;
+import de.jplag.rust.grammar.RustParser.TuplePatternContext;
+import de.jplag.rust.grammar.RustParser.TuplePatternItemsContext;
+import de.jplag.rust.grammar.RustParser.TupleStructItemsContext;
+import de.jplag.rust.grammar.RustParser.TupleStructPatternContext;
+import de.jplag.rust.grammar.RustParser.TypeAliasContext;
+import de.jplag.rust.grammar.RustParser.TypeParamContext;
+import de.jplag.rust.grammar.RustParser.Type_Context;
+import de.jplag.rust.grammar.RustParser.Union_Context;
+import de.jplag.rust.grammar.RustParser.UseDeclarationContext;
+import de.jplag.rust.grammar.RustParser.UseTreeContext;
+
 /**
  * Contains the token extraction rules for the rust language module.
  */
@@ -178,7 +179,9 @@ public class RustListener extends AbstractAntlrListener {
         visit(InnerAttributeContext.class).mapRange(INNER_ATTRIBUTE);
         visit(OuterAttributeContext.class).mapRange(OUTER_ATTRIBUTE);
         visit(UseDeclarationContext.class).map(USE_DECLARATION);
-        visit(SimplePathContext.class, (c) -> hasScope(c, Scope.USE_TREE) && !(c.parent.getChildCount() > 1 && "::".equals(c.parent.getChild(1).getText()))).mapRange(USE_ITEM);
+        visit(SimplePathContext.class,
+                (c) -> hasScope(c, Scope.USE_TREE) && !(c.parent.getChildCount() > 1 && "::".equals(c.parent.getChild(1).getText())))
+                        .mapRange(USE_ITEM);
         visit(ModuleContext.class).map(MODULE);
         visit(Struct_Context.class).map(STRUCT);
         visit(StructExpression_Context.class).map(STRUCT_INITIALISATION);
@@ -235,16 +238,17 @@ public class RustListener extends AbstractAntlrListener {
 
         visit(RustParser.STAR, node -> node.getParent() instanceof UseTreeContext).map(USE_ITEM);
         visit(RustParser.KW_LET, node -> !hasScope(node, Scope.MACRO_INNER)).map(VARIABLE_DECLARATION);
-        visit(RustParser.EQ, node -> !hasParentType(node,
-                AttrInputContext.class, MacroPunctuationTokenContext.class,
-                TypeParamContext.class, GenericArgsBindingContext.class)
-                && !hasScope(node, Scope.MACRO_INNER)).map(ASSIGNMENT);
+        visit(RustParser.EQ, node -> !hasParentType(node, AttrInputContext.class, MacroPunctuationTokenContext.class, TypeParamContext.class,
+                GenericArgsBindingContext.class) && !hasScope(node, Scope.MACRO_INNER)).map(ASSIGNMENT);
 
-        visit(Type_Context.class, c -> c.getParent() instanceof GenericArgsTypesContext && c.getParent().getParent().getParent() instanceof PathExprSegmentContext).mapRange(TYPE_ARGUMENT);
-        visit(GenericArgContext.class, c -> c.getParent().getParent() instanceof  PathInExpressionContext).mapRange(TYPE_ARGUMENT);
-        visit(ExpressionContext.class, c -> c.getParent() instanceof  ArrayElementsContext).map(ARRAY_ELEMENT);
-        visit(ExpressionContext.class, c -> c.getParent() instanceof  CallParamsContext).mapRange(ARGUMENT);
-        visit(ExpressionContext.class, c -> (c.getParent() instanceof TuplePatternItemsContext || c.getParent() instanceof TupleElementsContext) && !hasScope(c, Scope.REDUNDANT_TUPLE)).map(TUPLE_ELEMENT);
+        visit(Type_Context.class,
+                c -> c.getParent() instanceof GenericArgsTypesContext && c.getParent().getParent().getParent() instanceof PathExprSegmentContext)
+                        .mapRange(TYPE_ARGUMENT);
+        visit(GenericArgContext.class, c -> c.getParent().getParent() instanceof PathInExpressionContext).mapRange(TYPE_ARGUMENT);
+        visit(ExpressionContext.class, c -> c.getParent() instanceof ArrayElementsContext).map(ARRAY_ELEMENT);
+        visit(ExpressionContext.class, c -> c.getParent() instanceof CallParamsContext).mapRange(ARGUMENT);
+        visit(ExpressionContext.class, c -> (c.getParent() instanceof TuplePatternItemsContext || c.getParent() instanceof TupleElementsContext)
+                && !hasScope(c, Scope.REDUNDANT_TUPLE)).map(TUPLE_ELEMENT);
         visit(ExpressionContext.class, c -> c.getParent() instanceof ClosureExpressionContext).map(CLOSURE_BODY_START, CLOSURE_BODY_END);
         visit(ExpressionContext.class, c -> c.getParent() instanceof ClosureExpressionContext).map(RETURN);
 
@@ -337,7 +341,7 @@ public class RustListener extends AbstractAntlrListener {
             case EnumItemTupleContext _ -> Scope.TUPLE;
             case MacroRulesDefinitionContext _ -> Scope.MACRO_RULES_DEFINITION_BODY;
             case MacroRuleContext _ -> Scope.MACRO_RULE_BODY;
-            case MacroInvocationSemiContext _, RustParser.MacroInvocationContext _ -> Scope.MACRO_INVOCATION_BODY;
+            case MacroInvocationSemiContext _,RustParser.MacroInvocationContext _ -> Scope.MACRO_INVOCATION_BODY;
             case ExternBlockContext _ -> Scope.EXTERN_BLOCK;
             case Function_Context functionContext -> {
                 if (functionContext.getChild(RustParser.FunctionReturnTypeContext.class, 0) != null) {
@@ -347,19 +351,16 @@ public class RustListener extends AbstractAntlrListener {
                 }
             }
             case ExpressionWithBlockContext _ -> Scope.INNER_BLOCK;
-            case IfExpressionContext _, RustParser.IfLetExpressionContext _ -> Scope.IF_BODY;
-            case InfiniteLoopExpressionContext _, RustParser.PredicateLoopExpressionContext _,
-                 PredicatePatternLoopExpressionContext _ -> Scope.LOOP_BODY;
+            case IfExpressionContext _,RustParser.IfLetExpressionContext _ -> Scope.IF_BODY;
+            case InfiniteLoopExpressionContext _,RustParser.PredicateLoopExpressionContext _,PredicatePatternLoopExpressionContext _ -> Scope.LOOP_BODY;
             case IteratorLoopExpressionContext _ -> Scope.FOR_BODY;
             case MatchExpressionContext _ -> Scope.MATCH_BODY;
-            case CallExpressionContext _, RustParser.MethodCallExpressionContext _ -> Scope.CALL;
+            case CallExpressionContext _,RustParser.MethodCallExpressionContext _ -> Scope.CALL;
             case TuplePatternContext _ -> Scope.TUPLE;
             case ClosureExpressionContext _ -> Scope.CLOSURE_BODY;
             case Type_Context _ -> Scope.TYPE;
-            case DelimTokenTreeContext delimTokenTreeContext
-                    when !(delimTokenTreeContext.getParent() instanceof RustParser.MacroTranscriberContext
-                    || delimTokenTreeContext.getParent() instanceof RustParser.MacroInvocationContext) ->
-                    Scope.MACRO_INNER;
+            case DelimTokenTreeContext delimTokenTreeContext when !(delimTokenTreeContext.getParent() instanceof RustParser.MacroTranscriberContext
+                    || delimTokenTreeContext.getParent() instanceof RustParser.MacroInvocationContext) -> Scope.MACRO_INNER;
 
             default -> {
                 if (context.getParent() == null) {
