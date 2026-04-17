@@ -176,28 +176,43 @@ public class RustListener extends AbstractAntlrListener {
      * New instance.
      */
     public RustListener() {
+        structureRules();
+        imperativeRules();
+        curlyRules();
+        parenthesisRules();
+        expressionRules();
+    }
+
+    private void structureRules() {
         visit(InnerAttributeContext.class).mapRange(INNER_ATTRIBUTE);
         visit(OuterAttributeContext.class).mapRange(OUTER_ATTRIBUTE);
         visit(UseDeclarationContext.class).map(USE_DECLARATION);
         visit(SimplePathContext.class,
                 (c) -> hasScope(c, Scope.USE_TREE) && !(c.parent.getChildCount() > 1 && "::".equals(c.parent.getChild(1).getText())))
-                        .mapRange(USE_ITEM);
+                .mapRange(USE_ITEM);
+        visit(RustParser.STAR, node -> node.getParent() instanceof UseTreeContext).map(USE_ITEM);
+
         visit(ModuleContext.class).map(MODULE);
         visit(Struct_Context.class).map(STRUCT);
         visit(StructExpression_Context.class).map(STRUCT_INITIALISATION);
         visit(StructExpressionContext.class).map(STRUCT_INITIALISATION);
         visit(StructFieldContext.class).map(STRUCT_FIELD);
-        visit(StructExprFieldContext.class).mapRange(ARGUMENT);
         visit(StructPatternContext.class).map(STRUCT);
         visit(StructPatternFieldContext.class).map(STRUCT_FIELD);
-        visit(TupleFieldContext.class, (c) -> !hasScope(c, Scope.REDUNDANT_TUPLE)).map(TUPLE_ELEMENT);
         visit(TupleStructPatternContext.class).map(STRUCT_INITIALISATION);
         visit(Union_Context.class).map(UNION);
-        visit(Trait_Context.class).map(TRAIT);
         visit(TypeAliasContext.class).map(TYPE_ALIAS);
         visit(ImplementationContext.class).map(IMPLEMENTATION);
         visit(EnumerationContext.class).map(ENUM);
         visit(EnumItemContext.class).map(ENUM_ITEM);
+
+        visit(Type_Context.class,
+                c -> c.getParent() instanceof GenericArgsTypesContext && c.getParent().getParent().getParent() instanceof PathExprSegmentContext)
+                .mapRange(TYPE_ARGUMENT);
+        visit(GenericArgContext.class, c -> c.getParent().getParent() instanceof PathInExpressionContext).mapRange(TYPE_ARGUMENT);
+    }
+
+    private void imperativeRules() {
         visit(MacroRulesDefinitionContext.class).map(MACRO_RULES_DEFINITION);
         visit(MacroRuleContext.class).map(MACRO_RULE);
         visit(MacroInvocationSemiContext.class).map(MACRO_INVOCATION);
@@ -212,6 +227,7 @@ public class RustListener extends AbstractAntlrListener {
         visit(GenericParamContext.class, c -> !(c.getParent().getParent() instanceof ForLifetimesContext)).mapRange(TYPE_PARAMETER);
         visit(IfExpressionContext.class).mapRange(IF_STATEMENT);
         visit(IfLetExpressionContext.class).map(IF_STATEMENT);
+        visit(RustParser.KW_ELSE).map(ELSE_STATEMENT);
         visit(LoopLabelContext.class).mapRange(LABEL);
         visit(InfiniteLoopExpressionContext.class).delegateTerminal(c -> c.getChild(TerminalNodeImpl.class, 0)).map(LOOP_STATEMENT);
         visit(PredicateLoopExpressionContext.class).delegateTerminal(c -> c.getChild(TerminalNodeImpl.class, 0)).map(LOOP_STATEMENT);
@@ -227,24 +243,19 @@ public class RustListener extends AbstractAntlrListener {
         visit(ClosureExpressionContext.class).map(CLOSURE);
         visit(ClosureParamContext.class).map(FUNCTION_PARAMETER);
         visit(ReturnExpressionContext.class).map(RETURN);
-        visit(ExpressionStatementContext.class, c -> {
-            RuleContext maybeFunctionBlock = c.parent.parent;
-            return maybeFunctionBlock instanceof RustParser.StatementsContext && maybeFunctionBlock.getChildCount() == 1
-                    && hasScope(c, Scope.FUNCTION_BODY) && !(c.getChild(0) instanceof RustParser.ReturnExpressionContext);
-        }).map(RETURN);
-
-        visit(PatternContext.class, c -> hasScope(c, Scope.TUPLE_STRUCT_PATTERN)).mapRange(ARGUMENT);
-        visit(PatternContext.class, c -> hasScope(c, Scope.TUPLE_PATTERN)).map(TUPLE_ELEMENT);
-
-        visit(RustParser.STAR, node -> node.getParent() instanceof UseTreeContext).map(USE_ITEM);
         visit(RustParser.KW_LET, node -> !hasScope(node, Scope.MACRO_INNER)).map(VARIABLE_DECLARATION);
         visit(RustParser.EQ, node -> !hasParentType(node, AttrInputContext.class, MacroPunctuationTokenContext.class, TypeParamContext.class,
                 GenericArgsBindingContext.class) && !hasScope(node, Scope.MACRO_INNER)).map(ASSIGNMENT);
 
-        visit(Type_Context.class,
-                c -> c.getParent() instanceof GenericArgsTypesContext && c.getParent().getParent().getParent() instanceof PathExprSegmentContext)
-                        .mapRange(TYPE_ARGUMENT);
-        visit(GenericArgContext.class, c -> c.getParent().getParent() instanceof PathInExpressionContext).mapRange(TYPE_ARGUMENT);
+        visit(StructExprFieldContext.class).mapRange(ARGUMENT);
+        visit(TupleFieldContext.class, (c) -> !hasScope(c, Scope.REDUNDANT_TUPLE)).map(TUPLE_ELEMENT);
+        visit(Trait_Context.class).map(TRAIT);
+
+        visit(PatternContext.class, c -> hasScope(c, Scope.TUPLE_STRUCT_PATTERN)).mapRange(ARGUMENT);
+        visit(PatternContext.class, c -> hasScope(c, Scope.TUPLE_PATTERN)).map(TUPLE_ELEMENT);
+    }
+
+    private void expressionRules() {
         visit(ExpressionContext.class, c -> c.getParent() instanceof ArrayElementsContext).map(ARRAY_ELEMENT);
         visit(ExpressionContext.class, c -> c.getParent() instanceof CallParamsContext).mapRange(ARGUMENT);
         visit(ExpressionContext.class, c -> (c.getParent() instanceof TuplePatternItemsContext || c.getParent() instanceof TupleElementsContext)
@@ -252,6 +263,32 @@ public class RustListener extends AbstractAntlrListener {
         visit(ExpressionContext.class, c -> c.getParent() instanceof ClosureExpressionContext).map(CLOSURE_BODY_START, CLOSURE_BODY_END);
         visit(ExpressionContext.class, c -> c.getParent() instanceof ClosureExpressionContext).map(RETURN);
 
+        visit(ExpressionStatementContext.class, c -> {
+            RuleContext maybeFunctionBlock = c.parent.parent;
+            return maybeFunctionBlock instanceof RustParser.StatementsContext && maybeFunctionBlock.getChildCount() == 1
+                    && hasScope(c, Scope.FUNCTION_BODY) && !(c.getChild(0) instanceof RustParser.ReturnExpressionContext);
+        }).map(RETURN);
+    }
+
+    private void parenthesisRules() {
+        visit(RustParser.LPAREN, node -> hasScope(node, Scope.STRUCT_DECLARATION_BODY)).map(STRUCT_BODY_START);
+        visit(RustParser.LPAREN, node -> hasScope(node, Scope.TUPLE)).map(TUPLE_START);
+        visit(RustParser.LPAREN, node -> hasScope(node, Scope.MACRO_INVOCATION_BODY)).map(MACRO_INVOCATION_BODY_START);
+        visit(RustParser.LPAREN, node -> hasScope(node, Scope.CALL)).map(APPLY);
+        visit(RustParser.LSQUAREBRACKET, node -> hasScope(node, Scope.MACRO_INVOCATION_BODY)).map(MACRO_INVOCATION_BODY_START);
+
+        visit(RustParser.RPAREN, node -> hasScope(node, Scope.STRUCT_DECLARATION_BODY)).map(STRUCT_BODY_END);
+        visit(RustParser.RPAREN, node -> hasScope(node, Scope.TUPLE)).map(TUPLE_END);
+        visit(RustParser.RPAREN, node -> hasScope(node, Scope.MACRO_INVOCATION_BODY)).map(MACRO_INVOCATION_BODY_END);
+        visit(RustParser.RSQUAREBRACKET, node -> hasScope(node, Scope.MACRO_INVOCATION_BODY)).map(MACRO_INVOCATION_BODY_END);
+    }
+
+    private void curlyRules() {
+        curlyOpeningRules();
+        curlyClosingRules();
+    }
+
+    private void curlyOpeningRules() {
         visit(RustParser.LCURLYBRACE, node -> hasScope(node, Scope.FUNCTION_BODY)).map(FUNCTION_BODY_START);
         visit(RustParser.LCURLYBRACE, node -> hasScope(node, Scope.PROCEDURE_BODY)).map(FUNCTION_BODY_START);
         visit(RustParser.LCURLYBRACE, node -> hasScope(node, Scope.STRUCT_DECLARATION_BODY)).map(STRUCT_BODY_START);
@@ -272,7 +309,9 @@ public class RustListener extends AbstractAntlrListener {
         visit(RustParser.LCURLYBRACE, node -> hasScope(node, Scope.MATCH_BODY)).map(MATCH_BODY_START);
         visit(RustParser.LCURLYBRACE, node -> hasScope(node, Scope.FOR_BODY)).map(FOR_BODY_START);
         visit(RustParser.LCURLYBRACE, node -> hasScope(node, Scope.TUPLE)).map(TUPLE_START);
+    }
 
+    private void curlyClosingRules() {
         visit(RustParser.RCURLYBRACE, node -> hasScope(node, Scope.FUNCTION_BODY)).map(FUNCTION_BODY_END);
         visit(RustParser.RCURLYBRACE, node -> hasScope(node, Scope.PROCEDURE_BODY)).map(FUNCTION_BODY_END);
         visit(RustParser.RCURLYBRACE, node -> hasScope(node, Scope.STRUCT_DECLARATION_BODY)).map(STRUCT_BODY_END);
@@ -293,19 +332,6 @@ public class RustListener extends AbstractAntlrListener {
         visit(RustParser.RCURLYBRACE, node -> hasScope(node, Scope.MATCH_BODY)).map(MATCH_BODY_END);
         visit(RustParser.RCURLYBRACE, node -> hasScope(node, Scope.FOR_BODY)).map(FOR_BODY_END);
         visit(RustParser.RCURLYBRACE, node -> hasScope(node, Scope.TUPLE)).map(TUPLE_END);
-
-        visit(RustParser.LPAREN, node -> hasScope(node, Scope.STRUCT_DECLARATION_BODY)).map(STRUCT_BODY_START);
-        visit(RustParser.LPAREN, node -> hasScope(node, Scope.TUPLE)).map(TUPLE_START);
-        visit(RustParser.LPAREN, node -> hasScope(node, Scope.MACRO_INVOCATION_BODY)).map(MACRO_INVOCATION_BODY_START);
-        visit(RustParser.LPAREN, node -> hasScope(node, Scope.CALL)).map(APPLY);
-        visit(RustParser.LSQUAREBRACKET, node -> hasScope(node, Scope.MACRO_INVOCATION_BODY)).map(MACRO_INVOCATION_BODY_START);
-
-        visit(RustParser.RPAREN, node -> hasScope(node, Scope.STRUCT_DECLARATION_BODY)).map(STRUCT_BODY_END);
-        visit(RustParser.RPAREN, node -> hasScope(node, Scope.TUPLE)).map(TUPLE_END);
-        visit(RustParser.RPAREN, node -> hasScope(node, Scope.MACRO_INVOCATION_BODY)).map(MACRO_INVOCATION_BODY_END);
-        visit(RustParser.RSQUAREBRACKET, node -> hasScope(node, Scope.MACRO_INVOCATION_BODY)).map(MACRO_INVOCATION_BODY_END);
-
-        visit(RustParser.KW_ELSE).map(ELSE_STATEMENT);
     }
 
     private boolean hasParentType(ParseTree node, Class<? extends ParserRuleContext>... parents) {
