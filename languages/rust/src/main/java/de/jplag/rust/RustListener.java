@@ -189,7 +189,7 @@ public class RustListener extends AbstractAntlrListener {
         visit(UseDeclarationContext.class).map(USE_DECLARATION);
         visit(SimplePathContext.class,
                 (c) -> hasScope(c, Scope.USE_TREE) && !(c.parent.getChildCount() > 1 && "::".equals(c.parent.getChild(1).getText())))
-                .mapRange(USE_ITEM);
+                        .mapRange(USE_ITEM);
         visit(RustParser.STAR, node -> node.getParent() instanceof UseTreeContext).map(USE_ITEM);
 
         visit(ModuleContext.class).map(MODULE);
@@ -208,7 +208,7 @@ public class RustListener extends AbstractAntlrListener {
 
         visit(Type_Context.class,
                 c -> c.getParent() instanceof GenericArgsTypesContext && c.getParent().getParent().getParent() instanceof PathExprSegmentContext)
-                .mapRange(TYPE_ARGUMENT);
+                        .mapRange(TYPE_ARGUMENT);
         visit(GenericArgContext.class, c -> c.getParent().getParent() instanceof PathInExpressionContext).mapRange(TYPE_ARGUMENT);
     }
 
