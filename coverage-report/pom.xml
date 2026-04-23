@@ -96,6 +96,7 @@
             <artifactId>emf-metamodel</artifactId>
         </dependency>
         <dependency>
+            <!-- deprecated dependency (only included to not break CI checks) -->
             <groupId>de.jplag</groupId>
             <artifactId>emf-metamodel-dynamic</artifactId>
         </dependency>
