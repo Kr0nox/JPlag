@@ -16,7 +16,7 @@ import de.jplag.util.FileUtils;
  * Provides a simple {@link JPlagResult} for tests to use. The tests should not depend on the contents of the result.
  */
 public class ExampleResult {
-    private static final String exampleCode = """
+    private static final String EXAMPLE_CODE = """
             public class A {
             }
             """.stripIndent();
@@ -31,8 +31,8 @@ public class ExampleResult {
     public static JPlagResult getExampleResult() throws IOException, ExitException {
         if (result == null) {
             File dir = Files.createTempDirectory("jplagCode").toFile();
-            FileUtils.write(new File(dir, "A.java"), exampleCode);
-            FileUtils.write(new File(dir, "B.java"), exampleCode);
+            FileUtils.write(new File(dir, "A.java"), EXAMPLE_CODE);
+            FileUtils.write(new File(dir, "B.java"), EXAMPLE_CODE);
 
             result = JPlag.run(new JPlagOptions(new JavaLanguage(), Set.of(dir), Set.of()).withMinimumTokenMatch(0));
         }
