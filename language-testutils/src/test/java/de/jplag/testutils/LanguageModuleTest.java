@@ -291,7 +291,7 @@ public abstract class LanguageModuleTest {
     }
 
     private List<TestData> getExceptionTestFiles() {
-        return this.collector.getExceptionTestFile();
+        return ignoreEmptyTestType(this.collector.getExceptionTestFile());
     }
 
     /**
