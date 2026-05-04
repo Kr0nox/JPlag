@@ -5,8 +5,12 @@
       <h2 class="col-start-1 row-start-1">{{ header }}</h2>
 
       <!-- On wide screens: SearchBar and Button on same row. On slim: seperate rows -->
-      <div class="flex grow flex-col gap-x-2 gap-y-2 md:flex-row">
-        <ToolTipComponent direction="left" class="w-full max-w-full grow" :show-info-symbol="false">
+      <div class="flex grow flex-col gap-x-2 gap-y-2 md:flex-row md:flex-wrap">
+        <ToolTipComponent
+          direction="left"
+          class="w-full max-w-full flex-[1_1_0]"
+          :show-info-symbol="false"
+        >
           <template #default>
             <SearchBarComponent
               v-model="searchString"
