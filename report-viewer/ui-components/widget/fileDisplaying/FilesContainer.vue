@@ -216,9 +216,8 @@ function scrollTo(file: string, line: number) {
  * Collapses all the code panels.
  */
 function collapseAll() {
-  const keys = Object.keys(codePanels.value)
-  for (const key of keys) {
-    codePanels.value[key].collapse()
+  for (const codePanel of Object.values(codePanels.value)) {
+    codePanel.collapse()
   }
 }
 
@@ -226,16 +225,14 @@ function collapseAll() {
  * Expands all the code panels.
  */
 function expandAll() {
-  const keys = Object.keys(codePanels.value)
-  for (const key of keys) {
-    codePanels.value[key].expand()
+  for (const codePanel of Object.values(codePanels.value)) {
+    codePanel.expand()
   }
 }
 
 const allCollapsed = computed(() => {
-  const keys = Object.keys(codePanels.value)
-  for (const key of keys) {
-    if (!codePanels.value[key].isCollapsed()) {
+  for (const codePanel of Object.values(codePanels.value)) {
+    if (!codePanel.isCollapsed()) {
       return false
     }
   }
