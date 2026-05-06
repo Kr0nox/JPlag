@@ -1,4 +1,4 @@
-package de.jplag.cli;
+package de.jplag.cli.cli;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

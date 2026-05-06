@@ -1,4 +1,4 @@
-package de.jplag.cli;
+package de.jplag.cli.cli;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

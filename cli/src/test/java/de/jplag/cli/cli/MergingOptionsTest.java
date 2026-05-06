@@ -1,4 +1,4 @@
-package de.jplag.cli;
+package de.jplag.cli.cli;
 
 import static de.jplag.cli.test.CliArgument.GAP_SIZE;
 import static de.jplag.cli.test.CliArgument.MERGING_ENABLED;
@@ -6,6 +6,7 @@ import static de.jplag.cli.test.CliArgument.NEIGHBOR_LENGTH;
 import static de.jplag.cli.test.CliArgument.REQUIRED_MERGES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 
@@ -43,7 +44,7 @@ class MergingOptionsTest extends CliTest {
                 .with(REQUIRED_MERGES, customNumber));
 
         assertNotNull(options.mergingOptions());
-        assertEquals(true, options.mergingOptions().enabled());
+        assertTrue(options.mergingOptions().enabled());
         assertEquals(customNumber, options.mergingOptions().minimumNeighborLength());
         assertEquals(customNumber, options.mergingOptions().maximumGapSize());
         assertEquals(customNumber, options.mergingOptions().minimumRequiredMerges());

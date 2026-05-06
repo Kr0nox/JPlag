@@ -1,4 +1,4 @@
-package de.jplag.cli;
+package de.jplag.cli.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import de.jplag.cli.CliException;
 import de.jplag.cli.picocli.CliInputHandler;
 import de.jplag.cli.test.CliArgument;
 import de.jplag.cli.test.CliTest;
