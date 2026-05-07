@@ -51,7 +51,8 @@ class MinimalModelInstanceTest {
         try {
             List<Token> tokens = language.parse(new HashSet<>(baseFiles), true);
             assertNotEquals(0, tokens.size());
-            logger.debug(TokenPrinterUtils.printTokensByFile(tokens, file -> new File(file.getAbsolutePath() + EmfModelLanguage.VIEW_FILE_EXTENSION)));
+            logger.debug(
+                    TokenPrinterUtils.printTokensByFile(tokens, file -> new File(file.getAbsolutePath() + EmfModelLanguage.VIEW_FILE_EXTENSION)));
             logger.info("Parsed tokens: " + tokens);
             assertEquals(7, tokens.size());
         } catch (ParsingException e) {
