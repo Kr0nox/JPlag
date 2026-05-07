@@ -3,6 +3,7 @@ package de.jplag.testutils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertLinesMatch;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -280,6 +281,17 @@ public abstract class LanguageModuleTest {
         List<Token> tokens = parseTokens(data);
 
         assertEquals(SharedTokenType.FILE_END, tokens.getLast().getType(), "Last token in " + data.describeTestSource() + " is not file end.");
+    }
+
+    @ParameterizedTest
+    @MethodSource("getExceptionTestFiles")
+    @DisplayName("Tests that the given test data leads to exceptions when parsing")
+    final void testExceptionFiles(TestData data) {
+        assertThrows(ParsingException.class, () -> parseTokens(data));
+    }
+
+    private List<TestData> getExceptionTestFiles() {
+        return ignoreEmptyTestType(this.collector.getExceptionTestFile());
     }
 
     /**
