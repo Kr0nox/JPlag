@@ -1,18 +1,9 @@
 name: Report Viewer SonarCloud
 
 on:
-  push:
-    branches:
-      - main
-      - develop
-    paths:
-      - "report-viewer/**"
-      - ".github/workflows/report-viewer-check-sonarcloud.yml"
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths:
-      - "report-viewer/**"
-      - ".github/workflows/report-viewer-check-sonarcloud.yml"
+  workflow_run:
+    workflows:
+      - Report Viewer Unit Test
   workflow_dispatch:
 
 jobs:
