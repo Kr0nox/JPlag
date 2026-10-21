@@ -1,9 +1,21 @@
 <!doctype html>
-<html lang="">
-  <script>
-    const UrlPath = window.location.pathname
-    const branch = UrlPath.split('/')[1]
-    const url = 'https://jplag.github.io/' + branch + '/'
-    location.replace(url)
-  </script>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- disables dark reader extension, if installed.
+             We have our own automatic dark mode and dark reader breaks our styling. -->
+        <meta name="darkreader-lock" />
+        <title>DFD WebEditor</title>
+
+        <link rel="icon" type="image/x-icon" href="https://dataflowanalysis.org/favicon.ico" />
+      <script type="module" crossorigin src="./assets/index-BAvGRpWZ.js"></script>
+      <link rel="modulepreload" crossorigin href="./assets/monaco-editor-DCWV1y5-.js">
+      <link rel="stylesheet" crossorigin href="./assets/monaco-editor-B8Nwu8CH.css">
+      <link rel="stylesheet" crossorigin href="./assets/index-iD3-oCU0.css">
+    </head>
+    <body>
+        <div id="sprotty"></div>
+    </body>
 </html>
